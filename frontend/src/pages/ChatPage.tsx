@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { chatApi, ChatMessage, ChatSession } from '../utils/api';
 import '../styles/globals.css';
 
 export default function ChatPage() {
+  const navigate = useNavigate();
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -82,12 +84,41 @@ export default function ChatPage() {
       {/* Sidebar */}
       <div className="sidebar">
         <div className="sidebar-header">
+          <h2 style={{ color: 'var(--sidebar-text)', fontSize: '18px', marginBottom: '16px' }}>
+            SSD Knowledge Portal
+          </h2>
           <button
             className="new-chat-btn"
             onClick={() => createSessionMutation.mutate()}
           >
             + New Chat
           </button>
+        </div>
+        <div style={{ padding: '12px', borderBottom: '1px solid var(--border-color)' }}>
+          <div
+            className="conversation-item active"
+            style={{ marginBottom: '4px' }}
+          >
+            💬 Chat
+          </div>
+          <div
+            className="conversation-item"
+            onClick={() => navigate('/issues')}
+          >
+            🔍 Issues Analysis
+          </div>
+          <div
+            className="conversation-item"
+            onClick={() => navigate('/reports')}
+          >
+            📊 Daily Reports
+          </div>
+          <div
+            className="conversation-item"
+            onClick={() => navigate('/knowledge')}
+          >
+            📚 Knowledge Base
+          </div>
         </div>
         <div className="conversation-list">
           {sessionsData?.sessions?.map((session: ChatSession) => (

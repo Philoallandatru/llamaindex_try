@@ -7,12 +7,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from backend.api import chat_routes, index_routes, source_routes, websocket_routes
+from backend.api import analysis_routes, chat_routes, index_routes, source_routes, websocket_routes
 from backend.config.settings import settings
 from backend.models.api import HealthCheckResponse
+from backend.services.analysis.issue_analyzer import create_issue_analyzer
 from backend.services.chat.chat_engine import create_chat_engine
 from backend.services.chat.session_manager import create_session_manager
 from backend.services.indexing.index_manager import create_index_manager
+from backend.services.knowledge.kb_manager import create_kb_manager
 
 # Configure logging
 logging.basicConfig(
@@ -26,6 +28,8 @@ logger = logging.getLogger(__name__)
 index_manager = None
 session_manager = None
 chat_engine = None
+kb_manager = None
+issue_analyzer = None
 
 
 @asynccontextmanager
@@ -34,7 +38,7 @@ async def lifespan(app: FastAPI):
 
     Initializes services on startup and cleans up on shutdown.
     """
-    global index_manager, session_manager, chat_engine
+    global index_manager, session_manager, chat_engine, kb_manager, issue_analyzer
 
     logger.info("Starting application...")
 
@@ -60,11 +64,21 @@ async def lifespan(app: FastAPI):
             context_window=settings.chat_context_window,
         )
 
+        # Initialize knowledge base manager
+        logger.info("Initializing knowledge base manager...")
+        kb_manager = create_kb_manager(base_dir="workspace/knowledge")
+
+        # Initialize issue analyzer (will be set up when Jira is configured)
+        # Note: issue_analyzer requires jira_connector which is created on-demand
+        # We'll initialize it lazily in analysis_routes when needed
+        logger.info("Issue analyzer will be initialized on first use")
+
         # Initialize route dependencies
         chat_routes.init_chat_routes(chat_engine, session_manager)
         websocket_routes.init_websocket_routes(chat_engine)
         index_routes.init_index_routes(index_manager)
         source_routes.init_source_routes(index_manager)
+        analysis_routes.init_analysis_routes(index_manager, kb_manager)
 
         logger.info("Application started successfully")
 
@@ -168,6 +182,7 @@ app.include_router(chat_routes.router)
 app.include_router(websocket_routes.router)
 app.include_router(index_routes.router)
 app.include_router(source_routes.router)
+app.include_router(analysis_routes.router)
 
 
 if __name__ == "__main__":

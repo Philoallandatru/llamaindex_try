@@ -104,6 +104,33 @@ export const indexApi = {
   },
 };
 
+export const analysisApi = {
+  analyzeIssue: async (
+    issueKey: string,
+    depth: 'quick' | 'deep' = 'deep',
+    includeRelated: boolean = true,
+    saveToKb: boolean = true
+  ) => {
+    const { data } = await api.post(`/api/analysis/issue/${issueKey}`, {
+      issue_key: issueKey,
+      depth,
+      include_related: includeRelated,
+      save_to_kb: saveToKb,
+    });
+    return data;
+  },
+
+  getSavedAnalysis: async (issueKey: string) => {
+    const { data } = await api.get(`/api/analysis/issue/${issueKey}`);
+    return data;
+  },
+
+  listAnalyzedIssues: async () => {
+    const { data } = await api.get('/api/analysis/issues');
+    return data;
+  },
+};
+
 export const sourceApi = {
   uploadFile: async (file: File) => {
     const formData = new FormData();
