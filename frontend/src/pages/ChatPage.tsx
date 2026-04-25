@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { chatApi, ChatMessage, ChatSession } from '../utils/api';
+import { chatApi } from '../utils/api';
+import type { ChatMessage, ChatSession } from '../types';
 import '../styles/globals.css';
 
 export default function ChatPage() {
