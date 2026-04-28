@@ -1,0 +1,43 @@
+# Jira Deep Analysis CLI Configuration
+
+# Jira Configuration
+jira:
+  server_url: "https://your-domain.atlassian.net"
+  token: "your-jira-api-token"
+  email: "your-email@example.com"  # Required for Jira Cloud
+  project_keys:
+    - "PROJ"
+    - "DEV"
+
+# Confluence Configuration (optional)
+confluence:
+  server_url: "https://your-domain.atlassian.net/wiki"
+  token: "your-confluence-api-token"
+  email: "your-email@example.com"
+  space_keys:
+    - "TECH"
+    - "DOCS"
+
+# Local Documents
+documents:
+  folder: "./documents"  # Folder containing PDF/Office files to index
+
+# LLM Configuration
+llm:
+  base_url: "http://localhost:1234/v1"
+  model: "qwen2.5-coder-7b-instruct"
+  embedding_model: "BAAI/bge-small-zh-v1.5"
+
+# Retrieval Configuration
+retrieval:
+  mode: "hybrid"  # Options: vector, bm25, hybrid
+  similarity_top_k: 10  # Number of results to retrieve
+  # Hybrid mode weights (must sum to 1.0)
+  bm25_weight: 0.7  # Higher for keyword matching (good for IDs, technical terms)
+  vector_weight: 0.3  # Lower for semantic similarity
+
+# Storage
+storage:
+  vector_store: "./data/cli_vector_store"
+  index_cache: "./data/cli_index_cache.json"  # Tracks indexed items
+  output: "./output"  # Analysis output directory

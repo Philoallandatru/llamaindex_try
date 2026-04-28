@@ -56,7 +56,11 @@ class MinerUParser:
             raise RuntimeError(f"Failed to parse PDF: {e}")
 
     def _parse_with_magic_pdf(self, file_path: Path) -> dict[str, any]:
-        """Parse using magic_pdf Python API."""
+        """Parse using magic_pdf Python API with ModelScope models."""
+        # Set ModelScope as model source
+        import os
+        os.environ['MODEL_SOURCE'] = 'modelscope'
+
         from magic_pdf.pipe.UNIPipe import UNIPipe
         from magic_pdf.rw.DiskReaderWriter import DiskReaderWriter
 
@@ -70,7 +74,7 @@ class MinerUParser:
         # Initialize reader/writer
         reader_writer = DiskReaderWriter(str(output_path))
 
-        # Parse PDF
+        # Parse PDF with ModelScope models
         pipe = UNIPipe(pdf_bytes, {"_pdf_type": ""}, reader_writer)
         pipe.pipe_classify()
         pipe.pipe_parse()

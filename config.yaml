@@ -1,0 +1,41 @@
+# Jira Deep Analysis CLI Configuration - Test
+
+# Jira Configuration
+jira:
+  server_url: "http://localhost:8080"
+  token: "test-token"
+  email: "test@example.com"
+  project_keys:
+    - "TEST"
+
+# Confluence Configuration (optional)
+# confluence:
+#   server_url: "https://test.atlassian.net/wiki"
+#   token: "test-token"
+#   email: "test@example.com"
+#   space_keys:
+#     - "TECH"
+
+# Local Documents
+documents:
+  folder: "./documents"
+
+# LLM Configuration
+llm:
+  base_url: "http://localhost:1234/v1"
+  model: "qwen3.5-4b"
+  embedding_model: "BAAI/bge-small-zh-v1.5"
+  timeout: 300  # 5 minutes timeout for LLM requests
+
+# Retrieval Configuration
+retrieval:
+  mode: "hybrid"  # Options: vector, bm25, hybrid
+  similarity_top_k: 10
+  bm25_weight: 0.7  # Higher for keyword matching
+  vector_weight: 0.3  # Lower for semantic similarity
+
+# Storage
+storage:
+  vector_store: "./data/cli_vector_store"
+  index_cache: "./data/cli_index_cache.json"
+  output: "./output"
