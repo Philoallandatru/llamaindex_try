@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis: TEST-123</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+               max-width: 900px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        h1 { color: #0052CC; border-bottom: 3px solid #0052CC; padding-bottom: 10px; }
+        h2 { color: #172B4D; margin-top: 30px; border-bottom: 1px solid #DFE1E6; padding-bottom: 8px; }
+        h3 { color: #42526E; }
+        hr { border: none; border-top: 2px solid #DFE1E6; margin: 30px 0; }
+        section { margin: 20px 0; }
+        code { background: #F4F5F7; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #F4F5F7; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .metadata { background: #DEEBFF; padding: 15px; border-radius: 5px; margin: 15px 0; }
+        .checkbox { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Jira Deep Analysis: TEST-123</h1>
+    <p><strong>Generated:</strong> 2026-04-28 14:34:02</p>
+
+    # Jira Deep Analysis: TEST-123</p><p><strong>Generated:<strong> 2026-04-28 14:34:02</p><p><hr></p><p></section><section><h2>Issue Details</p><p>Issue: TEST-123
+Summary: NVMe SSD performance degradation after firmware update
+Status: Open
+Priority: High
+Assignee: John Doe</p><p>Description:</p><p>After updating firmware from v3.2 to v3.3, we observed significant performance degradation:
+- Sequential read dropped from 3500 MB/s to 2800 MB/s
+- Random IOPS decreased by 25%
+- Latency increased from 50us to 80us</p><p>Environment:
+- NVMe SSD: Samsung 980 PRO
+- PCIe Gen4 x4
+- Firmware: v3.3 (PCI_Firmware_v3.3_20210120_NCB.pdf)
+- OS: Ubuntu 22.04</p><p>Steps to reproduce:
+1. Update firmware to v3.3
+2. Run fio benchmark
+3. Compare results with v3.2</p><p>Expected: Performance should remain stable or improve
+Actual: 20-25% performance drop</p><p>Related specs:
+- NVM Express Base Specification 2.1
+- PCIe Base 5.0 specification</p><p><h3>Metadata
+- <strong>Key:<strong> TEST-123
+- <strong>Status:<strong> Open
+- <strong>Priority:<strong> High
+- <strong>Assignee:<strong> John Doe</p><p><hr></p><p></section><section><h2>Similar Issues (3)</p><p><h3>1. TEST-123 (similarity: 0.02)
+Issue: TEST-123
+Summary: NVMe SSD performance degradation after firmware update
+Status: Open
+Priority: High
+Assignee: John Doe</p><p>Description:</p><p>After updating firmware from v3.2 to v3.3, we observed significant performance degradation:
+- Sequential read dropped from 3500 MB/s to 2800 MB/s
+- Random IOP...</p><p><h3>2. TEST-123 (similarity: 0.02)
+Issue: TEST-123
+Summary: NVMe SSD performance degradation after firmware update
+Status: Open
+Priority: High
+Assignee: John Doe</p><p>Description:</p><p>After updating firmware from v3.2 to v3.3, we observed significant performance degradation:
+- Sequential read dropped from 3500 MB/s to 2800 MB/s
+- Random IOP...</p><p><h3>3. TEST-456 (similarity: 0.02)
+Issue: TEST-456
+Summary: PCIe link training failure on cold boot
+Status: In Progress
+Priority: Medium
+Assignee: Jane Smith</p><p>Description:</p><p>PCIe device fails to enumerate on cold boot, requires warm reboot to detect.</p><p>Symptoms:
+- Device not visible in lspci on cold boot
+- Works fine after warm reboot
+...</p><p>
+<hr></p><p></section><section><h2>Relevant Documentation (10)</p><p><h3>1. [jira] Untitled (relevance: 0.02)
+Issue: TEST-123
+Summary: NVMe SSD performance degradation after firmware update
+Status: Open
+Priority: High
+Assignee: John Doe</p><p>Description:</p><p>After updating firmware from v3.2 to v3.3, we observed significant performance degradation:
+- Sequential read dropped from 3500 MB/s to 2800 MB/s
+- Random IOP...</p><p><h3>2. [jira] Untitled (relevance: 0.02)
+Issue: TEST-123
+Summary: NVMe SSD performance degradation after firmware update
+Status: Open
+Priority: High
+Assignee: John Doe</p><p>Description:</p><p>After updating firmware from v3.2 to v3.3, we observed significant performance degradation:
+- Sequential read dropped from 3500 MB/s to 2800 MB/s
+- Random IOP...</p><p><h3>3. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.02)
+NVM Express® Base Specification, Revision 2.1 
+ 
+194 
+Figure 183: Firmware Commit – Command Specific Status Values 
+Value Description 
+06h Invalid Firmware Slot:  The firmware slot indicated is invalid  or read only . This error is indicated if the 
+firmware slot exceeds the number supported.  
+07h ...</p><p><h3>4. [jira] Untitled (relevance: 0.02)
+Issue: TEST-456
+Summary: PCIe link training failure on cold boot
+Status: In Progress
+Priority: Medium
+Assignee: Jane Smith</p><p>Description:</p><p>PCIe device fails to enumerate on cold boot, requires warm reboot to detect.</p><p>Symptoms:
+- Device not visible in lspci on cold boot
+- Works fine after warm reboot
+...</p><p><h3>5. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.02)
+NVM Express® Base Specification, Revision 2.1 
+ 
+243
+Figure 237: Additional Hardware Error Information for Unexpected Power Loss Errors 
+Bytes Description 
+15:0 Unexpected Power Loss  (UPL): This field shall indicate the value from the Unexpected 
+Power Losses field in the SMART / Health Information...</p><p><h3>6. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.02)
+NVM Express® Base Specification, Revision 2.1 
+ 
+130 
+section 9.6 to avoid possible data corruption caused by interaction between outstanding commands and 
+subsequent commands submitted by that host to another controller. 
+3.10 Privileged Actions 
+Privileged actions are actions (e.g., command, prope...</p><p><h3>7. [documents\20190719_NVME-301-1_Das Sharma_FINAL.pdf] Untitled (relevance: 0.02)
+PCIe® SSDs for Storage
+Flash Memory Summit 2019
+Santa Clara, CA 10
+▪ PCI Express is a great interface for SSDs
+• Stunning performance 1 GB/s per lane/ direction (PCIe 3.0 x1) [2 (4) GB/s for PCIe 4.0 (5.0)]
+• Lane scalability 4 GB/s per device (PCIe 3.0 x4) [8 (16) GB/s for PCIe 4.0 (5.0)]
+• Lower l...</p><p><h3>8. [documents\PCI_Firmware_v3.3_20210120_NCB.pdf] Untitled (relevance: 0.02)
+PCI FIRMWARE SPECIFICATION 
+REVISION 3.3 
+JANUARY 20, 2021 2 
+ 
+ 
+ 
+ 
+Revision Revision History Date 
+1.0 Original issue distributed by Intel Corporation.  9/28/1992 
+2.0 Updated to be in synch with PCI Bus Specification, Rev. 2.0. 7/20/1993 
+2.1 Added functions for PCI IRQ routing; clarifications. ...</p><p><h3>9. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.02)
+NVM Express® Base Specification, Revision 2.1 
+ 
+497
+a) short device self-test operation (refer to section 8.1.7.1); 
+b) extended device self-test operation (refer to section 8.1.7.2); and 
+c) Host-Initiated Refresh operation (refer to section 8.1.11). 
+Figure 595 is an informative example of a devi...</p><p><h3>10. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.02)
+NVM Express® Base Specification, Revision 2.1 
+ 
+194 
+Figure 183: Firmware Commit – Command Specific Status Values 
+Value Description 
+06h Invalid Firmware Slot:  The firmware slot indicated is invalid  or read only . This error is indicated if the 
+firmware slot exceeds the number supported.  
+07h ...</p><p>
+<hr></p><p></section><section><h2>Root Cause Analysis</p><p>Based on the provided issue logs and documentation snippets, here is the structured analysis for Issue <strong>TEST-123<strong>.</p><p><h3>1. Root Cause Analysis</p><p>The performance degradation observed after updating the Samsung 980 PRO firmware from v3.2 to v3.3 is likely caused by a <strong>regression in the controller's queue management or power-saving logic<strong> introduced during the firmware update process.</p><p><em>   <strong>Symptom Correlation:<strong> The drop in sequential throughput (3500 MB/s → 2800 MB/s) and random IOPS (-25%) alongside increased latency (50us → 80us) indicates that the SSD controller is no longer utilizing its full bandwidth or queue depth efficiently.
+<em>   <strong>Firmware Version Context:<strong> The specific version `v3.3` (dated Jan 2021) suggests a potential bug introduced in this release cycle. Unlike hardware defects, firmware regressions often manifest as sub-optimal scheduling algorithms that prioritize latency over throughput under heavy load or fail to correctly handle PCIe Gen4 x4 transaction queues.
+<em>   <strong>Documentation Clues:<strong> The provided NVM Express spec snippets regarding "Invalid Firmware Image" and "Unexpected Power Loss" serve as reference points for <em>error handling<em>, but the current issue is a functional regression rather than an error state. However, if the new firmware incorrectly interprets power states or queue limits (as hinted at in the UPL/UPLI fields of the spec), it could trigger conservative throttling to prevent potential instability, resulting in the observed performance hit.
+<em>   <strong>Environment Factor:<strong> The use of Ubuntu 22.04 with a Gen4 x4 link confirms that the bottleneck is internal to the SSD controller logic rather than the host OS driver (which would likely show different error codes or require kernel module updates).</p><p><h3>2. Action Items</p><p>| ID | Action Item | Owner | Priority |
+| :--- | :--- | :--- | :--- |
+| <strong>AI-01<strong> | <strong>Verify Firmware Rollback:<strong> Revert the SSD firmware to v3.2 and run `fio` benchmarks again to confirm performance returns to baseline (3500 MB/s). This isolates the issue as a firmware regression. | John Doe | High |
+| <strong>AI-02<strong> | <strong>Check Controller Logs:<strong> Analyze `dmesg` and NVMe logs (`/sys/class/nvme/<em>/nvme<em>/nvm_expr`) for errors related to "Unexpected Power Loss," "Invalid Firmware Slot," or queue management timeouts post-update. | John Doe | High |
+| <strong>AI-03<strong> | <strong>Contact Vendor Support:<strong> Reach out to Samsung (or the specific vendor of the 980 PRO) with the benchmark data and firmware version details to report a potential regression in v3.3. Request a patch or a newer firmware version that fixes the queue scheduling logic. | John Doe | High |
+| <strong>AI-04<strong> | <strong>Review PCIe Link Training:<strong> Although Issue TEST-456 is separate, ensure the Gen4 x4 link is stable (no retraining events) to rule out physical layer interference affecting the new firmware's operation. | Jane Smith / John Doe | Medium |</p><p><h3>3. Verification Steps</p><p>To validate that the root cause has been addressed and performance is restored:</p><p>1.  <strong>Rollback Test:<strong>
+    <em>   Flash the SSD back to Firmware v3.2 using the official Samsung utility or `nvme-cli`.
+    <em>   Run the same `fio` benchmark suite used in the original report (Sequential Read, Random IOPS).
+    <em>   <strong>Pass Criteria:<strong> Sequential read ≥ 3450 MB/s and Latency ≤ 55us.</p><p>2.  <strong>Stress Test with New Firmware (if patch is pending):<strong>
+    <em>   If a newer firmware version is available from the vendor, install it on a test unit.
+    <em>   Run extended stress tests (e.g., `fio` for 1 hour) to ensure no intermittent crashes or further degradation occurs compared to v3.2.</p><p>3.  <strong>Cross-Platform Validation:<strong>
+    <em>   Repeat the benchmark on Windows and Linux environments to confirm the issue is specific to the Ubuntu kernel interaction with the new firmware (or if it affects all OSes).</p><p>4.  <strong>Final Acceptance:<strong>
+    <em>   Compare final metrics against the "Expected" values defined in the original ticket description. If metrics match v3.2 performance, close the issue and mark the vendor request as resolved.</p><p><hr></p><p></section><section><h2>Next Steps</p><p>- [ ] Review RCA findings
+- [ ] Validate action items
+- [ ] Execute verification steps
+- [ ] Update Jira issue with findings</p><p>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "5f148ade-0e86-4c41-a74d-09f0a77c46ef": {
+    "id": "5f148ade-0e86-4c41-a74d-09f0a77c46ef",
+    "name": "Test Knowledge Base",
+    "description": "E2E test knowledge base",
+    "datasource_ids": [
+      "fb1155ad-bd93-4433-bc3d-fb3fd4f50d30"
+    ],
+    "collection_name": "kb_5f148ade",
+    "retrieval_config": {
+      "mode": "hybrid",
+      "bm25_weight": 0.5,
+      "vector_weight": 0.5,
+      "similarity_top_k": 5,
+      "enable_reranker": false,
+      "reranker_model": "BAAI/bge-reranker-base",
+      "reranker_top_n": 3
+    },
+    "status": "active",
+    "document_count": 1,
+    "created_at": "2026-04-26T06:49:08.970753",
+    "updated_at": "2026-04-26T08:26:35.923439"
+  }
+}

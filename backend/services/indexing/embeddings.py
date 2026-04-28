@@ -1,7 +1,12 @@
 """Embedding model configuration using HuggingFace."""
 
 import logging
+import os
 from typing import Optional
+
+# Configure HuggingFace mirror for China - MUST be set before any imports
+os.environ['HF_ENDPOINT'] = 'https://hf-mirror.com'
+os.environ['HUGGINGFACE_HUB_CACHE'] = os.path.expanduser('~/.cache/huggingface')
 
 from llama_index.core.embeddings import BaseEmbedding
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -28,13 +33,24 @@ def get_embedding_model(
 
     logger.info(f"Loading embedding model: {model_name} on {device}")
 
-    embed_model = HuggingFaceEmbedding(
-        model_name=model_name,
-        device=device,
-        trust_remote_code=True,
-    )
-
-    return embed_model
+    # Try to load from local cache first
+    try:
+        embed_model = HuggingFaceEmbedding(
+            model_name=model_name,
+            device=device,
+            trust_remote_code=True,
+            cache_folder=os.path.expanduser('~/.cache/huggingface'),
+        )
+        return embed_model
+    except Exception as e:
+        logger.warning(f"Failed to load from cache, will download: {e}")
+        # If local cache fails, download from mirror
+        embed_model = HuggingFaceEmbedding(
+            model_name=model_name,
+            device=device,
+            trust_remote_code=True,
+        )
+        return embed_model
 
 
 def test_embedding_model() -> dict[str, any]:

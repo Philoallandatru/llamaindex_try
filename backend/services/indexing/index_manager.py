@@ -6,6 +6,7 @@ from typing import Optional
 
 from llama_index.core import Document, VectorStoreIndex
 from llama_index.core.retrievers import BaseRetriever
+from llama_index.core.vector_stores import MetadataFilters, ExactMatchFilter
 
 from .bm25_retriever import BM25Retriever, create_bm25_retriever
 from .embeddings import get_embedding_model
@@ -138,12 +139,14 @@ class IndexManager:
         self,
         similarity_top_k: int = 5,
         retrieval_mode: str = "hybrid",
+        filters: Optional[dict] = None,
     ) -> BaseRetriever:
         """Get retriever for querying.
 
         Args:
             similarity_top_k: Number of results to return
             retrieval_mode: Retrieval mode ("hybrid", "vector", "bm25")
+            filters: Metadata filters for retrieval (e.g., {"knowledge_base_id": "kb_123"})
 
         Returns:
             BaseRetriever instance
@@ -154,17 +157,29 @@ class IndexManager:
         if self.vector_index is None:
             raise ValueError("Index not built. Add documents first.")
 
+        # Convert dict filters to MetadataFilters object
+        metadata_filters = None
+        if filters:
+            filter_list = [
+                ExactMatchFilter(key=key, value=value)
+                for key, value in filters.items()
+            ]
+            metadata_filters = MetadataFilters(filters=filter_list)
+
         if retrieval_mode == "vector":
             # Vector-only retrieval
-            return self.vector_index.as_retriever(
-                similarity_top_k=similarity_top_k,
-            )
+            retriever_kwargs = {"similarity_top_k": similarity_top_k}
+            if metadata_filters:
+                retriever_kwargs["filters"] = metadata_filters
+            return self.vector_index.as_retriever(**retriever_kwargs)
 
         elif retrieval_mode == "bm25":
             # BM25-only retrieval
             if self.bm25_retriever is None:
                 raise ValueError("BM25 retriever not available")
             self.bm25_retriever._similarity_top_k = similarity_top_k
+            # Note: BM25 retriever doesn't support metadata filtering natively
+            # It will be filtered in hybrid mode if used
             return self.bm25_retriever
 
         elif retrieval_mode == "hybrid":
@@ -172,9 +187,10 @@ class IndexManager:
             if self.bm25_retriever is None:
                 raise ValueError("BM25 retriever not available for hybrid mode")
 
-            vector_retriever = self.vector_index.as_retriever(
-                similarity_top_k=similarity_top_k,
-            )
+            retriever_kwargs = {"similarity_top_k": similarity_top_k}
+            if metadata_filters:
+                retriever_kwargs["filters"] = metadata_filters
+            vector_retriever = self.vector_index.as_retriever(**retriever_kwargs)
 
             return create_hybrid_retriever(
                 bm25_retriever=self.bm25_retriever,
@@ -191,12 +207,14 @@ class IndexManager:
         self,
         similarity_top_k: int = 5,
         retrieval_mode: str = "hybrid",
+        filters: Optional[dict] = None,
     ):
         """Get query engine for Q&A.
 
         Args:
             similarity_top_k: Number of results to retrieve
             retrieval_mode: Retrieval mode ("hybrid", "vector", "bm25")
+            filters: Metadata filters for retrieval
 
         Returns:
             Query engine instance
@@ -207,6 +225,7 @@ class IndexManager:
         retriever = self.get_retriever(
             similarity_top_k=similarity_top_k,
             retrieval_mode=retrieval_mode,
+            filters=filters,
         )
 
         # Create query engine with custom retriever

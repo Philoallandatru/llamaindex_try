@@ -13,6 +13,8 @@ dependencies = [
     "llama-index-llms-openai-like>=0.1.0",
     "llama-index-embeddings-huggingface>=0.1.0",
     "llama-index-vector-stores-chroma>=0.1.0",
+    "llama-index-readers-jira>=0.1.0",
+    "llama-index-readers-confluence>=0.1.0",
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.34.0",
     "python-multipart>=0.0.9",
@@ -25,7 +27,12 @@ dependencies = [
     "magic-pdf>=0.7.0",
     "pypdf>=4.0",
     "python-dotenv>=1.0.0",
+    "pyyaml>=6.0",
+    "tqdm>=4.66.0",
 ]
+
+[project.scripts]
+jira-analyze = "cli:main"
 
 [tool.setuptools]
 packages = ["backend"]

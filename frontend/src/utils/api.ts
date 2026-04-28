@@ -42,6 +42,8 @@ export const chatApi = {
   sendMessage: async (
     sessionId: string,
     message: string,
+    knowledgeBaseId?: string | null,
+    modelId?: string | null,
     retrievalMode = 'hybrid',
     similarityTopK = 5
   ) => {
@@ -50,6 +52,8 @@ export const chatApi = {
       message,
       retrieval_mode: retrievalMode,
       similarity_top_k: similarityTopK,
+      knowledge_base_id: knowledgeBaseId,
+      model_id: modelId,
     });
     return data;
   },
@@ -118,6 +122,144 @@ export const sourceApi = {
 
   syncJira: async (config: any) => {
     const { data } = await api.post('/api/sources/jira/sync', config);
+    return data;
+  },
+};
+
+export const reportsApi = {
+  generateReport: async (date: string, mode: 'quick' | 'full' = 'quick') => {
+    const { data } = await api.post('/api/reports/daily', {
+      date,
+      mode,
+    });
+    return data;
+  },
+
+  getReport: async (reportId: string) => {
+    const { data } = await api.get(`/api/reports/daily/${reportId}`);
+    return data;
+  },
+
+  getSavedReport: async (date: string) => {
+    const { data } = await api.get(`/api/reports/daily/saved/${date}`);
+    return data;
+  },
+
+  listReports: async () => {
+    const { data } = await api.get('/api/reports/daily/list');
+    return data.reports || [];
+  },
+};
+
+// Data Source API
+export const datasourceApi = {
+  list: async () => {
+    const { data } = await api.get('/api/datasources');
+    return data;
+  },
+
+  get: async (id: string) => {
+    const { data } = await api.get(`/api/datasources/${id}`);
+    return data;
+  },
+
+  create: async (datasource: any) => {
+    const { data } = await api.post('/api/datasources', datasource);
+    return data;
+  },
+
+  update: async (id: string, datasource: any) => {
+    const { data } = await api.put(`/api/datasources/${id}`, datasource);
+    return data;
+  },
+
+  delete: async (id: string) => {
+    const { data } = await api.delete(`/api/datasources/${id}`);
+    return data;
+  },
+
+  sync: async (id: string) => {
+    const { data } = await api.post(`/api/datasources/${id}/sync`);
+    return data;
+  },
+
+  uploadFile: async (file: File) => {
+    const formData = new FormData();
+    formData.append('files', file);  // Changed from 'file' to 'files' to match backend
+    const { data } = await api.post('/api/datasources/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return data;
+  },
+};
+
+// Knowledge Base API
+export const knowledgeBaseApi = {
+  list: async () => {
+    const { data } = await api.get('/api/knowledge-bases');
+    return data;
+  },
+
+  get: async (id: string) => {
+    const { data } = await api.get(`/api/knowledge-bases/${id}`);
+    return data;
+  },
+
+  create: async (kb: any) => {
+    const { data } = await api.post('/api/knowledge-bases', kb);
+    return data;
+  },
+
+  update: async (id: string, kb: any) => {
+    const { data } = await api.put(`/api/knowledge-bases/${id}`, kb);
+    return data;
+  },
+
+  delete: async (id: string) => {
+    const { data } = await api.delete(`/api/knowledge-bases/${id}`);
+    return data;
+  },
+
+  sync: async (id: string) => {
+    const { data } = await api.post(`/api/knowledge-bases/${id}/sync`);
+    return data;
+  },
+};
+
+// Model Configuration API
+export const modelApi = {
+  list: async () => {
+    const { data } = await api.get('/api/models');
+    return data;
+  },
+
+  get: async (id: string) => {
+    const { data } = await api.get(`/api/models/${id}`);
+    return data;
+  },
+
+  create: async (model: any) => {
+    const { data } = await api.post('/api/models', model);
+    return data;
+  },
+
+  update: async (id: string, model: any) => {
+    const { data } = await api.put(`/api/models/${id}`, model);
+    return data;
+  },
+
+  delete: async (id: string) => {
+    const { data } = await api.delete(`/api/models/${id}`);
+    return data;
+  },
+
+  setDefault: async (id: string) => {
+    const { data } = await api.post(`/api/models/${id}/set-default`);
+    return data;
+  },
+
+  getDefault: async () => {
+    const { data } = await api.get('/api/models/default');
     return data;
   },
 };

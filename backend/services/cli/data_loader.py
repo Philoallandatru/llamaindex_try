@@ -34,6 +34,13 @@ class DataLoader:
         # Real Jira API (original code)
         try:
             from llama_index.readers.jira import JiraReader
+
+            print(f"\n=== Connecting to Jira Server ===")
+            print(f"Server URL: {self.config.jira.server_url}")
+            print(f"Email: {self.config.jira.email}")
+            print(f"Project Keys: {self.config.jira.project_keys}")
+            print(f"Token: {'*' * 10 if self.config.jira.token else 'NOT SET'}")
+
             reader = JiraReader(
                 server_url=self.config.jira.server_url,
                 email=self.config.jira.email,
@@ -43,7 +50,9 @@ class DataLoader:
             docs = []
             for project_key in self.config.jira.project_keys:
                 jql = f"project = {project_key}"
+                print(f"\nQuerying Jira: {jql}")
                 issues = reader.load_data(query=jql)
+                print(f"Found {len(issues)} issues in {project_key}")
 
                 for doc in issues:
                     issue_key = doc.metadata.get("key")
@@ -51,20 +60,56 @@ class DataLoader:
                         docs.append(doc)
                         self.tracker.mark_indexed("jira_issues", issue_key, {"project": project_key})
 
+            print(f"\n[SUCCESS] Successfully loaded {len(docs)} new/updated issues from Jira")
             return docs
-        except Exception as e:
-            print(f"Warning: Jira API failed, using mock data: {e}")
+
+        except ImportError as e:
+            print(f"\n✗ Jira Reader Import Error:")
+            print(f"  Error: {e}")
+            print(f"  Solution: Install llama-index-readers-jira")
+            print(f"  Command: pip install llama-index-readers-jira")
+            print(f"\n→ Falling back to mock data...")
             self.use_mock_jira = True
-            self.mock_jira = MockJiraLoader()  # Initialize mock loader
+            self.mock_jira = MockJiraLoader()
+            return self.load_jira_issues(force_refresh)
+
+        except Exception as e:
+            import traceback
+            print(f"\n✗ Jira API Connection Failed:")
+            print(f"  Error Type: {type(e).__name__}")
+            print(f"  Error Message: {str(e)}")
+            print(f"\n  Configuration Check:")
+            print(f"    - Server URL format: Should be 'https://your-domain.atlassian.net' or 'http://localhost:8080'")
+            print(f"    - Current URL: {self.config.jira.server_url}")
+            print(f"    - Email: {self.config.jira.email}")
+            print(f"    - Token: {'Set' if self.config.jira.token else 'NOT SET'}")
+            print(f"\n  Common Issues:")
+            print(f"    1. Invalid server URL format")
+            print(f"    2. Incorrect API token or expired token")
+            print(f"    3. Network connectivity issues")
+            print(f"    4. Firewall blocking the connection")
+            print(f"    5. Project key doesn't exist or no access")
+            print(f"\n  Full Traceback:")
+            traceback.print_exc()
+            print(f"\n→ Falling back to mock data...")
+            self.use_mock_jira = True
+            self.mock_jira = MockJiraLoader()
             return self.load_jira_issues(force_refresh)
 
     def load_confluence_pages(self, force_refresh: bool = False) -> List[Document]:
         """Load Confluence pages incrementally"""
         if not self.config.confluence:
+            print("\n[INFO] Confluence not configured, skipping...")
             return []
 
         try:
             from llama_index.readers.confluence import ConfluenceReader
+
+            print(f"\n=== Connecting to Confluence ===")
+            print(f"Server URL: {self.config.confluence.server_url}")
+            print(f"Space Keys: {self.config.confluence.space_keys}")
+            print(f"Token: {'*' * 10 if self.config.confluence.token else 'NOT SET'}")
+
             reader = ConfluenceReader(
                 base_url=self.config.confluence.server_url,
                 cloud=True,
@@ -73,7 +118,9 @@ class DataLoader:
 
             docs = []
             for space_key in self.config.confluence.space_keys:
+                print(f"\nLoading pages from space: {space_key}")
                 pages = reader.load_data(space_key=space_key, include_attachments=True)
+                print(f"Found {len(pages)} pages in {space_key}")
 
                 for doc in pages:
                     page_id = doc.metadata.get("page_id")
@@ -81,9 +128,31 @@ class DataLoader:
                         docs.append(doc)
                         self.tracker.mark_indexed("confluence_pages", page_id, {"space": space_key})
 
+            print(f"\n[SUCCESS] Successfully loaded {len(docs)} new/updated pages from Confluence")
             return docs
+
+        except ImportError as e:
+            print(f"\n[ERROR] Confluence Reader Import Error:")
+            print(f"  Error: {e}")
+            print(f"  Solution: Install llama-index-readers-confluence")
+            print(f"  Command: pip install llama-index-readers-confluence")
+            return []
+
         except Exception as e:
-            print(f"Warning: Confluence API failed: {e}")
+            import traceback
+            print(f"\n[ERROR] Confluence API Connection Failed:")
+            print(f"  Error Type: {type(e).__name__}")
+            print(f"  Error Message: {str(e)}")
+            print(f"\n  Configuration Check:")
+            print(f"    - Server URL: {self.config.confluence.server_url}")
+            print(f"    - Token: {'Set' if self.config.confluence.token else 'NOT SET'}")
+            print(f"    - Space Keys: {self.config.confluence.space_keys}")
+            print(f"\n  Common Issues:")
+            print(f"    1. Invalid server URL or token")
+            print(f"    2. Space key doesn't exist or no access")
+            print(f"    3. Network connectivity issues")
+            print(f"\n  Full Traceback:")
+            traceback.print_exc()
             return []
 
     def load_documents(self, force_refresh: bool = False) -> List[Document]:

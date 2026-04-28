@@ -1,0 +1,53 @@
+{
+  "fb1155ad-bd93-4433-bc3d-fb3fd4f50d30": {
+    "id": "fb1155ad-bd93-4433-bc3d-fb3fd4f50d30",
+    "name": "Test Document Datasource",
+    "description": "E2E test datasource",
+    "type": "file",
+    "config": {
+      "file_paths": [
+        "C:\\Users\\10259\\Documents\\code\\codex\\llamaindex_try\\backend\\data\\uploads\\test_document.txt"
+      ]
+    },
+    "status": "active",
+    "last_sync": "2026-04-26T08:07:45.013607",
+    "sync_count": 1,
+    "document_count": 1,
+    "created_at": "2026-04-26T06:48:19.325842",
+    "updated_at": "2026-04-26T08:07:45.013607"
+  },
+  "54996d26-bfee-47c4-b908-fde44022194e": {
+    "id": "54996d26-bfee-47c4-b908-fde44022194e",
+    "name": "Test PDF Source",
+    "description": "Test data source",
+    "type": "file",
+    "config": {
+      "file_paths": [
+        "C:\\Users\\10259\\Documents\\code\\codex\\llamaindex_try\\data\\uploads\\test_upload.pdf"
+      ]
+    },
+    "status": "active",
+    "last_sync": null,
+    "sync_count": 0,
+    "document_count": 0,
+    "created_at": "2026-04-26T13:02:05.450558",
+    "updated_at": "2026-04-26T13:02:05.450558"
+  },
+  "f167a180-8017-4f7e-8911-98d45f94d486": {
+    "id": "f167a180-8017-4f7e-8911-98d45f94d486",
+    "name": "NVMe",
+    "description": "s",
+    "type": "file",
+    "config": {
+      "file_paths": [
+        "C:\\Users\\10259\\Documents\\code\\codex\\llamaindex_try\\data\\uploads\\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf"
+      ]
+    },
+    "status": "active",
+    "last_sync": null,
+    "sync_count": 0,
+    "document_count": 0,
+    "created_at": "2026-04-26T22:24:22.248305",
+    "updated_at": "2026-04-26T22:24:22.248305"
+  }
+}

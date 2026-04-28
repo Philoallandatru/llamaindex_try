@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Optional
 
 from backend.models.analysis import AnalysisMetadata, IssueAnalysisResult
+from backend.models.report import FullReport
 
 logger = logging.getLogger(__name__)
 
@@ -193,18 +194,96 @@ class KnowledgeBaseManager:
 
         return "\n".join(lines)
 
+    def _format_report_markdown(self, report: FullReport) -> str:
+        """Format daily report as Markdown.
+
+        Args:
+            report: Full report object
+
+        Returns:
+            Markdown formatted string
+        """
+        lines = [
+            f"# Daily Report - {report.date}",
+            "",
+            f"**生成时间**: {report.generated_at}",
+            "",
+            "## 概览",
+            "",
+            report.summary,
+            "",
+            "## 统计信息",
+            "",
+            f"**总计**: {report.quick_report.stats.total_issues} 个 Issues 更新",
+            "",
+        ]
+
+        # Status breakdown
+        if report.quick_report.stats.by_status:
+            lines.extend([
+                "### 按状态分类",
+                "",
+            ])
+            for status, count in report.quick_report.stats.by_status.items():
+                lines.append(f"- **{status}**: {count}")
+            lines.append("")
+
+        # Priority breakdown
+        if report.quick_report.stats.by_priority:
+            lines.extend([
+                "### 按优先级分类",
+                "",
+            ])
+            for priority, count in report.quick_report.stats.by_priority.items():
+                lines.append(f"- **{priority}**: {count}")
+            lines.append("")
+
+        # Key updates
+        if report.key_updates:
+            lines.extend([
+                "## 关键更新",
+                "",
+            ])
+            for update in report.key_updates:
+                lines.append(f"- {update}")
+            lines.append("")
+
+        # Recommendations
+        if report.recommendations:
+            lines.extend([
+                "## 建议",
+                "",
+            ])
+            for rec in report.recommendations:
+                lines.append(f"- {rec}")
+            lines.append("")
+
+        # Issue list
+        if report.quick_report.issues:
+            lines.extend([
+                "## 更新的 Issues",
+                "",
+            ])
+            for issue in report.quick_report.issues:
+                assignee = issue.assignee or "未分配"
+                lines.append(
+                    f"- **{issue.key}**: {issue.summary} "
+                    f"[{issue.status}] [{issue.priority}] - {assignee}"
+                )
+            lines.append("")
+
+        return "\n".join(lines)
+
     def save_daily_report(
         self,
         date: str,
-        quick_report: dict,
-        full_report: Optional[str] = None,
+        full_report: FullReport,
     ) -> dict[str, str]:
         """Save daily report to knowledge base.
 
         Args:
             date: Report date (YYYY-MM-DD)
-            quick_report: Quick report data
-            full_report: Full report markdown (optional)
+            full_report: Full report object
 
         Returns:
             Dictionary with saved file paths
@@ -212,36 +291,37 @@ class KnowledgeBaseManager:
         report_dir = self.reports_dir / date
         report_dir.mkdir(parents=True, exist_ok=True)
 
-        # Save quick report as JSON
-        quick_path = report_dir / "quick_report.json"
-        quick_path.write_text(
-            json.dumps(quick_report, indent=2, ensure_ascii=False),
+        # Save full report as JSON
+        report_path = report_dir / "report.json"
+        report_path.write_text(
+            full_report.model_dump_json(indent=2),
             encoding="utf-8",
         )
 
-        paths = {"quick_report_path": str(quick_path)}
-
-        # Save full report as Markdown if provided
-        if full_report:
-            full_path = report_dir / "full_report.md"
-            full_path.write_text(full_report, encoding="utf-8")
-            paths["full_report_path"] = str(full_path)
+        # Save as Markdown for readability
+        markdown_content = self._format_report_markdown(full_report)
+        markdown_path = report_dir / "report.md"
+        markdown_path.write_text(markdown_content, encoding="utf-8")
 
         # Save metadata
         metadata = {
             "date": date,
-            "timestamp": datetime.utcnow().isoformat(),
-            "issues_count": len(quick_report.get("issues", [])),
+            "timestamp": full_report.generated_at,
+            "issues_count": full_report.quick_report.stats.total_issues,
         }
         metadata_path = report_dir / "metadata.json"
         metadata_path.write_text(
             json.dumps(metadata, indent=2, ensure_ascii=False),
             encoding="utf-8",
         )
-        paths["metadata_path"] = str(metadata_path)
 
         logger.info(f"Saved daily report for {date} to {report_dir}")
-        return paths
+
+        return {
+            "report_path": str(report_path),
+            "markdown_path": str(markdown_path),
+            "metadata_path": str(metadata_path),
+        }
 
     def get_daily_report(self, date: str) -> Optional[dict]:
         """Get saved daily report.
@@ -256,22 +336,22 @@ class KnowledgeBaseManager:
         if not report_dir.exists():
             return None
 
-        quick_path = report_dir / "quick_report.json"
-        full_path = report_dir / "full_report.md"
+        report_path = report_dir / "report.json"
+        markdown_path = report_dir / "report.md"
         metadata_path = report_dir / "metadata.json"
 
-        if not quick_path.exists():
+        if not report_path.exists():
             return None
 
         # Read files
-        quick_report = json.loads(quick_path.read_text(encoding="utf-8"))
-        full_report = full_path.read_text(encoding="utf-8") if full_path.exists() else None
+        report_data = json.loads(report_path.read_text(encoding="utf-8"))
+        markdown = markdown_path.read_text(encoding="utf-8") if markdown_path.exists() else None
         metadata = json.loads(metadata_path.read_text(encoding="utf-8")) if metadata_path.exists() else {}
 
         return {
             "date": date,
-            "quick_report": quick_report,
-            "full_report": full_report,
+            "report": report_data,
+            "markdown": markdown,
             "metadata": metadata,
         }
 

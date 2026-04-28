@@ -53,6 +53,8 @@ async def create_session(request: CreateSessionRequest):
         session = session_manager.create_session(
             name=request.name,
             metadata=request.metadata,
+            knowledge_base_id=request.knowledge_base_id,
+            model_id=request.model_id,
         )
 
         return {
@@ -60,6 +62,8 @@ async def create_session(request: CreateSessionRequest):
             "name": session.name,
             "created_at": session.created_at.isoformat(),
             "message_count": 0,
+            "knowledge_base_id": session.knowledge_base_id,
+            "model_id": session.model_id,
         }
 
     except Exception as e:
@@ -188,6 +192,8 @@ async def send_message(request: SendMessageRequest):
             retrieval_mode=request.retrieval_mode,
             similarity_top_k=request.similarity_top_k,
             source_filters=request.source_filters,
+            knowledge_base_id=request.knowledge_base_id,
+            model_id=request.model_id,
         )
 
         return response
