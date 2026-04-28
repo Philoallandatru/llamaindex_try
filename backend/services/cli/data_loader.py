@@ -55,6 +55,7 @@ class DataLoader:
         except Exception as e:
             print(f"Warning: Jira API failed, using mock data: {e}")
             self.use_mock_jira = True
+            self.mock_jira = MockJiraLoader()  # Initialize mock loader
             return self.load_jira_issues(force_refresh)
 
     def load_confluence_pages(self, force_refresh: bool = False) -> List[Document]:
