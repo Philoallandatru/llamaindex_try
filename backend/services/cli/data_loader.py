@@ -64,18 +64,18 @@ class DataLoader:
             return docs
 
         except ImportError as e:
-            print(f"\n✗ Jira Reader Import Error:")
+            print(f"\n[ERROR] Jira Reader Import Error:")
             print(f"  Error: {e}")
             print(f"  Solution: Install llama-index-readers-jira")
             print(f"  Command: pip install llama-index-readers-jira")
-            print(f"\n→ Falling back to mock data...")
+            print(f"\n-> Falling back to mock data...")
             self.use_mock_jira = True
             self.mock_jira = MockJiraLoader()
             return self.load_jira_issues(force_refresh)
 
         except Exception as e:
             import traceback
-            print(f"\n✗ Jira API Connection Failed:")
+            print(f"\n[ERROR] Jira API Connection Failed:")
             print(f"  Error Type: {type(e).__name__}")
             print(f"  Error Message: {str(e)}")
             print(f"\n  Configuration Check:")
@@ -91,7 +91,7 @@ class DataLoader:
             print(f"    5. Project key doesn't exist or no access")
             print(f"\n  Full Traceback:")
             traceback.print_exc()
-            print(f"\n→ Falling back to mock data...")
+            print(f"\n-> Falling back to mock data...")
             self.use_mock_jira = True
             self.mock_jira = MockJiraLoader()
             return self.load_jira_issues(force_refresh)
