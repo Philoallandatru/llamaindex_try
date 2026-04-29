@@ -20,6 +20,43 @@ from backend.services.cli.index_tracker import IndexTracker
 from backend.services.cli.output_formatter import OutputFormatter
 
 class JiraAnalyzer:
+    @staticmethod
+    def _clean_metadata_dict(metadata: dict) -> dict:
+        """Clean metadata to only include ChromaDB-compatible types (str, int, float, None)"""
+        cleaned = {}
+        for key, value in metadata.items():
+            if value is None:
+                cleaned[key] = None
+            elif isinstance(value, (str, int, float)):
+                cleaned[key] = value
+            elif isinstance(value, list):
+                # Convert list to comma-separated string
+                cleaned[key] = ", ".join(str(v) for v in value) if value else ""
+            elif isinstance(value, dict):
+                # Convert dict to string representation
+                cleaned[key] = str(value)
+            else:
+                # Convert any other type to string
+                cleaned[key] = str(value)
+        return cleaned
+
+    @staticmethod
+    def _clean_metadata(docs: List) -> List:
+        """Clean metadata for all documents"""
+        from llama_index.core.schema import Document
+        cleaned_docs = []
+        for doc in docs:
+            # Clean the metadata
+            cleaned_metadata = JiraAnalyzer._clean_metadata_dict(doc.metadata)
+            # Create new document with cleaned metadata
+            cleaned_doc = Document(
+                text=doc.text,
+                metadata=cleaned_metadata,
+                doc_id=doc.doc_id
+            )
+            cleaned_docs.append(cleaned_doc)
+        return cleaned_docs
+
     def __init__(self, config_path: Path, use_mock_jira: bool = False):
         self.config = load_config(config_path)
         self.use_mock_jira = use_mock_jira
@@ -185,6 +222,8 @@ class JiraAnalyzer:
             all_docs = jira_docs + conf_docs + local_docs
             if all_docs:
                 pbar.set_description(f"Indexing {len(all_docs)} documents")
+                # Clean metadata before indexing
+                all_docs = self._clean_metadata(all_docs)
                 for doc in tqdm(all_docs, desc="Building index", leave=False):
                     self.index.insert(doc)
                 # Persist docstore
@@ -302,6 +341,8 @@ Based on the above information, provide:
 
             new_docs = jira_docs + conf_docs + local_docs
             if new_docs:
+                # Clean metadata before indexing
+                new_docs = self._clean_metadata(new_docs)
                 for doc in tqdm(new_docs, desc="Indexing new docs", leave=False):
                     self.index.insert(doc)
                 # Persist docstore after adding new docs
