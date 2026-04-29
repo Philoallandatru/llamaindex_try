@@ -67,6 +67,11 @@ data/cli_vector_store/
 backend/data/vector_store/
 data/cli_index_cache.json
 data/test_cache.json
+data/test_cache2.json
+
+# Documents (large PDFs)
+documents/*.pdf
+!documents/.gitkeep
 
 # OS
 .DS_Store
