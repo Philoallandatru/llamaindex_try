@@ -237,22 +237,37 @@ class JiraAnalyzer:
         if self.use_mock_jira:
             return self.mock_jira.get_issue(jira_key)
 
-        from llama_index.readers.jira import JiraReader
-        reader = JiraReader(
-            server_url=self.config.jira.server_url,
-            email=self.config.jira.email,
-            api_token=self.config.jira.token
-        )
+        try:
+            from llama_index.readers.jira import JiraReader
+            from llama_index.readers.jira.base import PATauth
 
-        docs = reader.load_data(query=f"key = {jira_key}")
-        if not docs:
-            raise ValueError(f"Issue {jira_key} not found")
+            # Use PATauth for Jira Server
+            pat_auth = PATauth(
+                server_url=self.config.jira.server_url,
+                api_token=self.config.jira.token
+            )
+            reader = JiraReader(PATauth=pat_auth)
 
-        return {
-            "key": jira_key,
-            "content": docs[0].text,
-            "metadata": docs[0].metadata
-        }
+            docs = reader.load_data(query=f"key = {jira_key}")
+            if not docs:
+                raise ValueError(f"Issue {jira_key} not found")
+
+            return {
+                "key": jira_key,
+                "content": docs[0].text,
+                "metadata": docs[0].metadata
+            }
+        except Exception as e:
+            print(f"\n[ERROR] Failed to fetch Jira issue {jira_key}")
+            print(f"    URL: {self.config.jira.server_url}")
+            print(f"    Error: {str(e)}")
+            print(f"    Falling back to mock data...")
+
+            # Fallback to mock
+            if not hasattr(self, 'mock_jira'):
+                from backend.services.cli.mock_data import MockJiraLoader
+                self.mock_jira = MockJiraLoader()
+            return self.mock_jira.get_issue(jira_key)
 
     def _retrieve_similar_issues(self, issue_text: str, top_k: int = 5) -> List[Dict]:
         """Retrieve similar Jira issues"""
