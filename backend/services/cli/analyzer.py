@@ -18,6 +18,7 @@ from backend.services.cli.config import load_config
 from backend.services.cli.data_loader import DataLoader
 from backend.services.cli.index_tracker import IndexTracker
 from backend.services.cli.output_formatter import OutputFormatter
+from backend.services.cli.jira_profiles import build_analysis_prompt, route_issue_type
 
 class JiraAnalyzer:
     @staticmethod
@@ -300,25 +301,47 @@ class JiraAnalyzer:
         ][:top_k]
 
     def _generate_rca(self, issue: Dict, similar: List[Dict], docs: List[Dict]) -> str:
-        """Generate RCA using LLM"""
-        context = f"""# Issue: {issue['key']}
+        """Generate deep analysis using LLM with Chinese prompts"""
 
-## Issue Content
-{issue['content']}
+        # 获取 Issue Type 并路由到对应的分析 Profile
+        issue_type = issue.get('metadata', {}).get('issue_type', 'Bug')
+        profile_key = route_issue_type(issue_type)
 
-## Similar Issues
-{self._format_similar(similar)}
+        print(f"  Issue Type: {issue_type}")
+        print(f"  Analysis Profile: {profile_key}")
 
-## Relevant Documentation
-{self._format_docs(docs)}
+        # 格式化相似问题
+        formatted_similar = []
+        for item in similar[:5]:
+            formatted_similar.append({
+                'key': item['metadata'].get('key', 'N/A'),
+                'summary': item['metadata'].get('summary', 'N/A'),
+                'status': item['metadata'].get('status', 'N/A'),
+                'score': item.get('score', 0.0),
+                'text': item['text'][:500]
+            })
 
-Based on the above information, provide:
-1. Root Cause Analysis
-2. Action Items
-3. Verification Steps
-"""
+        # 格式化相关文档
+        formatted_docs = []
+        for doc in docs[:10]:
+            formatted_docs.append({
+                'source': doc['metadata'].get('source', 'N/A'),
+                'title': doc['metadata'].get('title', 'Untitled'),
+                'score': doc.get('score', 0.0),
+                'text': doc['text']
+            })
 
-        response = Settings.llm.complete(context)
+        # 构建中文深度分析 Prompt
+        prompt = build_analysis_prompt(
+            issue_type=issue_type,
+            issue_content=issue['content'],
+            similar_issues=formatted_similar,
+            relevant_docs=formatted_docs,
+            mode="strict"  # 使用严格证据审查模式
+        )
+
+        # 调用 LLM 生成分析
+        response = Settings.llm.complete(prompt)
         return response.text
 
     def _format_similar(self, similar: List[Dict]) -> str:
