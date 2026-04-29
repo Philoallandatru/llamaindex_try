@@ -1,18 +1,16 @@
 # Jira Deep Analysis CLI Configuration - Test
 
-# Jira Configuration
+# Jira Configuration (Jira Server with Personal Access Token)
 jira:
-  server_url: "http://localhost:8080"
-  token: "test-token"
-  email: "test@example.com"
+  server_url: "http://localhost:8080"  # Your Jira Server URL
+  token: "test-token"  # Personal Access Token (no email needed for Jira Server)
   project_keys:
     - "TEST"
 
-# Confluence Configuration (optional)
+# Confluence Configuration (optional, for Confluence Server)
 # confluence:
-#   server_url: "https://test.atlassian.net/wiki"
-#   token: "test-token"
-#   email: "test@example.com"
+#   server_url: "http://your-confluence-server:8090"  # Confluence Server URL
+#   token: "your-personal-access-token"  # Personal Access Token (no email needed for Confluence Server)
 #   space_keys:
 #     - "TECH"
 

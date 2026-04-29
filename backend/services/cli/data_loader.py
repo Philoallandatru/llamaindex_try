@@ -34,18 +34,20 @@ class DataLoader:
         # Real Jira API (original code)
         try:
             from llama_index.readers.jira import JiraReader
+            from llama_index.readers.jira.base import PATauth
 
             print(f"\n=== Connecting to Jira Server ===")
             print(f"Server URL: {self.config.jira.server_url}")
-            print(f"Email: {self.config.jira.email}")
             print(f"Project Keys: {self.config.jira.project_keys}")
             print(f"Token: {'*' * 10 if self.config.jira.token else 'NOT SET'}")
 
-            reader = JiraReader(
+            # Use PATauth for Jira Server (only needs URL + token, no email)
+            pat_auth = PATauth(
                 server_url=self.config.jira.server_url,
-                email=self.config.jira.email,
                 api_token=self.config.jira.token
             )
+
+            reader = JiraReader(PATauth=pat_auth)
 
             docs = []
             for project_key in self.config.jira.project_keys:
@@ -79,16 +81,16 @@ class DataLoader:
             print(f"  Error Type: {type(e).__name__}")
             print(f"  Error Message: {str(e)}")
             print(f"\n  Configuration Check:")
-            print(f"    - Server URL format: Should be 'https://your-domain.atlassian.net' or 'http://localhost:8080'")
-            print(f"    - Current URL: {self.config.jira.server_url}")
-            print(f"    - Email: {self.config.jira.email}")
+            print(f"    - Server URL: {self.config.jira.server_url}")
             print(f"    - Token: {'Set' if self.config.jira.token else 'NOT SET'}")
+            print(f"    - Auth Method: PATauth (Personal Access Token for Jira Server)")
             print(f"\n  Common Issues:")
-            print(f"    1. Invalid server URL format")
-            print(f"    2. Incorrect API token or expired token")
-            print(f"    3. Network connectivity issues")
+            print(f"    1. Invalid server URL (should be http://your-jira-server:port)")
+            print(f"    2. Incorrect Personal Access Token or expired token")
+            print(f"    3. Network connectivity issues (check if server is reachable)")
             print(f"    4. Firewall blocking the connection")
-            print(f"    5. Project key doesn't exist or no access")
+            print(f"    5. Project key doesn't exist or no access permissions")
+            print(f"    6. SSL certificate issues (if using https)")
             print(f"\n  Full Traceback:")
             traceback.print_exc()
             print(f"\n-> Falling back to mock data...")
@@ -105,15 +107,16 @@ class DataLoader:
         try:
             from llama_index.readers.confluence import ConfluenceReader
 
-            print(f"\n=== Connecting to Confluence ===")
+            print(f"\n=== Connecting to Confluence Server ===")
             print(f"Server URL: {self.config.confluence.server_url}")
             print(f"Space Keys: {self.config.confluence.space_keys}")
             print(f"Token: {'*' * 10 if self.config.confluence.token else 'NOT SET'}")
 
+            # Use api_token for Confluence Server (cloud=False)
             reader = ConfluenceReader(
                 base_url=self.config.confluence.server_url,
-                cloud=True,
-                oauth2={"token": self.config.confluence.token}
+                cloud=False,  # Set to False for Confluence Server
+                api_token=self.config.confluence.token
             )
 
             docs = []
@@ -146,11 +149,14 @@ class DataLoader:
             print(f"\n  Configuration Check:")
             print(f"    - Server URL: {self.config.confluence.server_url}")
             print(f"    - Token: {'Set' if self.config.confluence.token else 'NOT SET'}")
+            print(f"    - Auth Method: api_token (Personal Access Token for Confluence Server)")
             print(f"    - Space Keys: {self.config.confluence.space_keys}")
             print(f"\n  Common Issues:")
-            print(f"    1. Invalid server URL or token")
-            print(f"    2. Space key doesn't exist or no access")
-            print(f"    3. Network connectivity issues")
+            print(f"    1. Invalid server URL (should be http://your-confluence-server:port)")
+            print(f"    2. Incorrect Personal Access Token or expired token")
+            print(f"    3. Space key doesn't exist or no access permissions")
+            print(f"    4. Network connectivity issues (check if server is reachable)")
+            print(f"    5. SSL certificate issues (if using https)")
             print(f"\n  Full Traceback:")
             traceback.print_exc()
             return []

@@ -1,19 +1,23 @@
 # Jira Deep Analysis CLI Configuration
 
 # Jira Configuration
+# For Jira Server: only server_url and token are required
+# For Jira Cloud: server_url, token, and email are required
 jira:
-  server_url: "https://your-domain.atlassian.net"
-  token: "your-jira-api-token"
-  email: "your-email@example.com"  # Required for Jira Cloud
+  server_url: "http://your-jira-server:8080"  # Jira Server URL
+  token: "your-personal-access-token"  # Personal Access Token for Jira Server
+  # email: "your-email@example.com"  # Only needed for Jira Cloud
   project_keys:
     - "PROJ"
     - "DEV"
 
 # Confluence Configuration (optional)
+# For Confluence Server: only server_url and token are required
+# For Confluence Cloud: server_url, token, and email are required
 confluence:
-  server_url: "https://your-domain.atlassian.net/wiki"
-  token: "your-confluence-api-token"
-  email: "your-email@example.com"
+  server_url: "http://your-confluence-server:8090"  # Confluence Server URL
+  token: "your-personal-access-token"  # Personal Access Token for Confluence Server
+  # email: "your-email@example.com"  # Only needed for Confluence Cloud
   space_keys:
     - "TECH"
     - "DOCS"

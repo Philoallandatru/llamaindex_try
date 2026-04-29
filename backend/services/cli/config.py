@@ -8,13 +8,13 @@ from pydantic import BaseModel
 class JiraConfig(BaseModel):
     server_url: str
     token: str
-    email: str
+    email: Optional[str] = None  # Optional: only needed for Jira Cloud
     project_keys: list[str]
 
 class ConfluenceConfig(BaseModel):
     server_url: str
     token: str
-    email: str
+    email: Optional[str] = None  # Optional: only needed for Confluence Cloud
     space_keys: list[str]
 
 class DocumentsConfig(BaseModel):
