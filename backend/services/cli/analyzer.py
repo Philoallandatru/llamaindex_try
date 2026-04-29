@@ -266,7 +266,7 @@ class JiraAnalyzer:
 
             # Fallback to mock
             if not hasattr(self, 'mock_jira'):
-                from backend.services.cli.mock_data import MockJiraLoader
+                from services.cli.mock_jira import MockJiraLoader
                 self.mock_jira = MockJiraLoader()
             return self.mock_jira.get_issue(jira_key)
 
