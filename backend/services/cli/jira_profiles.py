@@ -9,25 +9,51 @@ ISSUE_TYPE_ROUTING = {
     "HW Bug": {"family": "defect", "route": "rca"},
     "Test Bug": {"family": "defect", "route": "rca"},
     "Bug": {"family": "defect", "route": "rca"},
+    "Defect": {"family": "defect", "route": "rca"},
+    "Issue": {"family": "defect", "route": "rca"},
 
     # 需求类
     "DAS": {"family": "requirement", "route": "requirement_trace"},
     "PRD": {"family": "requirement", "route": "requirement_trace"},
     "MRD": {"family": "requirement", "route": "requirement_trace"},
     "Requirement": {"family": "requirement", "route": "requirement_trace"},
+    "Feature": {"family": "requirement", "route": "requirement_trace"},
+    "User Story": {"family": "requirement", "route": "requirement_trace"},
+    "Story": {"family": "requirement", "route": "requirement_trace"},
 
     # 变更类
     "Requirement Change": {"family": "requirement_change", "route": "change_impact"},
     "Component Change": {"family": "change_control", "route": "change_impact"},
     "Change Request": {"family": "change_control", "route": "change_impact"},
+    "CR": {"family": "change_control", "route": "change_impact"},
+    "ECO": {"family": "change_control", "route": "change_impact"},  # Engineering Change Order
+    "ECN": {"family": "change_control", "route": "change_impact"},  # Engineering Change Notice
 
     # 交付类
     "Epic": {"family": "delivery", "route": "delivery_summary"},
     "Story": {"family": "delivery", "route": "delivery_summary"},
     "Task": {"family": "delivery", "route": "delivery_summary"},
+    "Sub-task": {"family": "delivery", "route": "delivery_summary"},
+    "Subtask": {"family": "delivery", "route": "delivery_summary"},
 
     # 发布类
     "Release": {"family": "release", "route": "release_summary"},
+    "Version": {"family": "release", "route": "release_summary"},
+
+    # 改进类
+    "Improvement": {"family": "improvement", "route": "improvement_analysis"},
+    "Enhancement": {"family": "improvement", "route": "improvement_analysis"},
+    "Optimization": {"family": "improvement", "route": "improvement_analysis"},
+
+    # 技术债务类
+    "Tech Debt": {"family": "tech_debt", "route": "tech_debt_analysis"},
+    "Technical Debt": {"family": "tech_debt", "route": "tech_debt_analysis"},
+    "Refactoring": {"family": "tech_debt", "route": "tech_debt_analysis"},
+
+    # 测试类
+    "Test Case": {"family": "test", "route": "test_analysis"},
+    "Test": {"family": "test", "route": "test_analysis"},
+    "Test Plan": {"family": "test", "route": "test_analysis"},
 }
 
 # 分析 Profile 定义
@@ -57,7 +83,8 @@ ANALYSIS_PROFILES: Dict[str, Dict] = {
 3. 差距分析：指出当前实现与规格要求之间的差距
 4. 依赖关系：分析需求的上下游依赖，包括硬件依赖、固件模块依赖
 5. 测试覆盖：评估测试用例是否充分覆盖需求的各个方面
-6. 风险评估：识别需求实现中的潜在风险和不确定性"""
+6. 风险评估：识别需求实现中的潜在风险和不确定性
+7. 实施建议：需求实现的优先级建议、实施路径建议"""
     },
 
     "change_impact": {
@@ -101,6 +128,51 @@ ANALYSIS_PROFILES: Dict[str, Dict] = {
 4. 兼容性：向后兼容性、Host兼容性
 5. 风险评估：已知风险、缓解措施
 6. 发布建议：发布准备度、注意事项"""
+    },
+
+    "improvement_analysis": {
+        "label": "改进分析",
+        "assistant_intro": "你是一位系统改进和优化分析专家。",
+        "task_instruction": """基于检索到的Confluence文档和规格说明证据，对此改进问题进行分析。
+
+分析要求：
+1. 改进目标：明确改进的目标和预期收益（性能提升、资源优化、用户体验改善）
+2. 当前状态：分析现有实现的瓶颈和不足
+3. 改进方案：提出具体的改进方案，包括技术路线、实现方法
+4. 收益评估：量化改进带来的收益（性能提升百分比、资源节省、响应时间缩短）
+5. 成本分析：评估改进的开发成本、测试成本、风险成本
+6. 优先级：根据收益/成本比确定改进优先级
+7. 实施建议：分阶段实施方案、验证方法、回滚策略"""
+    },
+
+    "tech_debt_analysis": {
+        "label": "技术债务分析",
+        "assistant_intro": "你是一位技术债务评估和重构专家。",
+        "task_instruction": """基于检索到的Confluence文档和代码库证据，对此技术债务问题进行分析。
+
+分析要求：
+1. 债务识别：明确技术债务的类型（代码质量、架构设计、文档缺失、测试覆盖）
+2. 债务成因：分析债务产生的原因（快速交付、需求变更、技术选型失误）
+3. 影响评估：评估债务对系统的影响（维护成本、开发效率、系统稳定性、扩展性）
+4. 偿还方案：提出具体的重构方案，包括重构范围、技术路线
+5. 风险控制：识别重构过程中的风险（功能回归、性能下降、兼容性问题）
+6. 优先级：根据影响程度和偿还成本确定优先级
+7. 实施建议：分阶段重构方案、测试策略、验证方法"""
+    },
+
+    "test_analysis": {
+        "label": "测试分析",
+        "assistant_intro": "你是一位测试策略和质量保证专家。",
+        "task_instruction": """基于检索到的Confluence文档和测试规范证据，对此测试问题进行分析。
+
+分析要求：
+1. 测试范围：明确测试覆盖的功能模块、测试类型（单元测试、集成测试、系统测试）
+2. 测试策略：分析测试方法、测试工具、测试环境配置
+3. 覆盖率评估：评估测试用例对需求和代码的覆盖程度
+4. 缺陷分析：分析测试发现的缺陷分布、严重程度、根因类型
+5. 质量评估：基于测试结果评估系统质量（功能完整性、性能指标、稳定性）
+6. 差距识别：指出测试覆盖的盲区和不足
+7. 改进建议：提出测试用例补充、测试流程优化、自动化测试建议"""
     }
 }
 

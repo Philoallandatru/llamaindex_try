@@ -1,6 +1,7 @@
 """Multi-format document parser with MinerU and fallback support."""
 
 import logging
+import re
 from pathlib import Path
 from typing import Optional
 
@@ -27,13 +28,15 @@ class DocumentParser:
         ".json": "text",
     }
 
-    def __init__(self, use_mineru: bool = True):
+    def __init__(self, use_mineru: bool = True, filter_toc: bool = True):
         """Initialize document parser.
 
         Args:
             use_mineru: Whether to use MinerU for parsing (default: True)
+            filter_toc: Whether to filter out table of contents pages (default: True)
         """
         self.use_mineru = use_mineru
+        self.filter_toc = filter_toc
         self.mineru_parser: Optional[MinerUParser] = None
 
         if use_mineru:
@@ -41,6 +44,61 @@ class DocumentParser:
             if not self.mineru_parser.is_available():
                 logger.warning("MinerU not available, will use fallback parsers")
                 self.mineru_parser = None
+
+    def _is_toc_page(self, text: str, page_num: int) -> bool:
+        """Detect if a page is a table of contents page.
+
+        Args:
+            text: Page text content
+            page_num: Page number (1-indexed)
+
+        Returns:
+            True if page appears to be a TOC page
+        """
+        if not text or len(text.strip()) < 50:
+            return False
+
+        text_lower = text.lower()
+
+        # TOC keywords in multiple languages
+        toc_keywords = [
+            "table of contents",
+            "contents",
+            "目录",
+            "目　录",
+            "table des matières",
+            "inhaltsverzeichnis",
+        ]
+
+        # Check for TOC keywords at the beginning
+        first_100_chars = text_lower[:100]
+        has_toc_keyword = any(keyword in first_100_chars for keyword in toc_keywords)
+
+        # Pattern 1: Multiple lines with page numbers at the end
+        # Example: "Chapter 1 .................. 5"
+        page_number_pattern = r'\.{3,}\s*\d+\s*$'
+        dotted_lines = len(re.findall(page_number_pattern, text, re.MULTILINE))
+
+        # Pattern 2: Lines with chapter/section numbers followed by page numbers
+        # Example: "1.1 Introduction .......... 10"
+        section_pattern = r'^\s*\d+\.[\d\.]*\s+.+\s+\d+\s*$'
+        section_lines = len(re.findall(section_pattern, text, re.MULTILINE))
+
+        # Pattern 3: High ratio of numbers (page references)
+        numbers = re.findall(r'\b\d+\b', text)
+        number_ratio = len(numbers) / max(len(text.split()), 1)
+
+        # Decision logic
+        if has_toc_keyword and (dotted_lines >= 3 or section_lines >= 3):
+            return True
+
+        if dotted_lines >= 5 or section_lines >= 5:
+            return True
+
+        if has_toc_keyword and number_ratio > 0.05 and page_num < 20:
+            return True
+
+        return False
 
     async def parse_file(self, file_path: Path) -> list[Document]:
         """Parse a file and return LlamaIndex Documents.
@@ -105,10 +163,17 @@ class DocumentParser:
 
             reader = PdfReader(str(file_path))
             documents = []
+            filtered_count = 0
 
             for page_num, page in enumerate(reader.pages, start=1):
                 text = page.extract_text()
                 if text.strip():
+                    # Filter TOC pages if enabled
+                    if self.filter_toc and self._is_toc_page(text, page_num):
+                        logger.info(f"Filtered TOC page {page_num} from {file_path.name}")
+                        filtered_count += 1
+                        continue
+
                     doc = Document(
                         text=text,
                         metadata={
@@ -120,6 +185,9 @@ class DocumentParser:
                         },
                     )
                     documents.append(doc)
+
+            if filtered_count > 0:
+                logger.info(f"Filtered {filtered_count} TOC pages from {file_path.name}")
 
             return documents
 
