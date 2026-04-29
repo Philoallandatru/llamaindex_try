@@ -45,12 +45,12 @@ class DocumentParser:
                 logger.warning("MinerU not available, will use fallback parsers")
                 self.mineru_parser = None
 
-    def _is_toc_page(self, text: str, page_num: int) -> bool:
+    def _is_toc_page(self, text: str, page_num: int = 0) -> bool:
         """Detect if a page is a table of contents page.
 
         Args:
             text: Page text content
-            page_num: Page number (1-indexed)
+            page_num: Page number (1-indexed, optional)
 
         Returns:
             True if page appears to be a TOC page
@@ -95,7 +95,8 @@ class DocumentParser:
         if dotted_lines >= 5 or section_lines >= 5:
             return True
 
-        if has_toc_keyword and number_ratio > 0.05 and page_num < 20:
+        # Only check page_num if provided (for pypdf path)
+        if page_num > 0 and has_toc_keyword and number_ratio > 0.05 and page_num < 20:
             return True
 
         return False
@@ -267,8 +268,25 @@ class DocumentParser:
 
         # Main text document
         if parsed_data.get("text"):
+            text = parsed_data["text"]
+
+            # Apply TOC filtering if enabled and source is PDF
+            if self.filter_toc and source_type == "pdf":
+                # Split by page breaks (MinerU uses form feed character)
+                pages = text.split('\f')
+                filtered_pages = []
+
+                for page_text in pages:
+                    if page_text.strip() and not self._is_toc_page(page_text):
+                        filtered_pages.append(page_text)
+
+                text = '\f'.join(filtered_pages)
+
+                if len(filtered_pages) < len(pages):
+                    print(f"[INFO] Filtered {len(pages) - len(filtered_pages)} TOC pages from {file_path.name}")
+
             doc = Document(
-                text=parsed_data["text"],
+                text=text,
                 metadata={
                     "source": str(file_path),
                     "source_type": source_type,
