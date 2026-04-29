@@ -107,8 +107,9 @@ async def test_jira_connection(request: JiraConnectionRequest):
     try:
         connector = JiraConnector(
             base_url=request.base_url,
-            email=request.email,
             api_token=request.api_token,
+            email=request.email,
+            cloud=request.cloud,
         )
 
         result = await connector.test_connection()
@@ -139,8 +140,9 @@ async def sync_jira(request: JiraConnectionRequest):
     try:
         connector = JiraConnector(
             base_url=request.base_url,
-            email=request.email,
             api_token=request.api_token,
+            email=request.email,
+            cloud=request.cloud,
         )
 
         # Set connector for analysis routes
@@ -195,8 +197,9 @@ async def test_confluence_connection(request: ConfluenceConnectionRequest):
     try:
         connector = ConfluenceConnector(
             base_url=request.base_url,
-            email=request.email,
             api_token=request.api_token,
+            email=request.email,
+            cloud=request.cloud,
         )
 
         result = await connector.test_connection()
@@ -227,8 +230,9 @@ async def sync_confluence(request: ConfluenceConnectionRequest):
     try:
         connector = ConfluenceConnector(
             base_url=request.base_url,
-            email=request.email,
             api_token=request.api_token,
+            email=request.email,
+            cloud=request.cloud,
         )
 
         # Fetch pages

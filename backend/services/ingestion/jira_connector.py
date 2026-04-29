@@ -17,23 +17,42 @@ class JiraConnector:
     def __init__(
         self,
         base_url: str,
-        email: str,
         api_token: str,
+        email: Optional[str] = None,
+        cloud: bool = True,
     ):
         """Initialize Jira connector.
 
         Args:
-            base_url: Jira instance URL (e.g., https://your-domain.atlassian.net)
-            email: User email
-            api_token: API token from Jira
+            base_url: Jira instance URL
+                - Cloud: https://your-domain.atlassian.net
+                - Server: http://your-server:8080
+            api_token: API token or Personal Access Token
+            email: User email (required for Cloud, optional for Server)
+            cloud: True for Jira Cloud, False for Jira Server
         """
         self.base_url = base_url
-        self.jira = Jira(
-            url=base_url,
-            username=email,
-            password=api_token,
-            cloud=True,
-        )
+        self.cloud = cloud
+
+        if cloud and not email:
+            raise ValueError("email is required for Jira Cloud")
+
+        # For Cloud: use email as username
+        # For Server: use token directly (no username needed)
+        if cloud:
+            self.jira = Jira(
+                url=base_url,
+                username=email,
+                password=api_token,
+                cloud=True,
+            )
+        else:
+            # Jira Server with token authentication
+            self.jira = Jira(
+                url=base_url,
+                token=api_token,
+                cloud=False,
+            )
 
     async def test_connection(self) -> dict[str, any]:
         """Test Jira connection.

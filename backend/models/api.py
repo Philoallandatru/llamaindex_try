@@ -63,22 +63,24 @@ class JiraConnectionRequest(BaseModel):
     """Request to connect to Jira."""
 
     base_url: str = Field(..., description="Jira base URL")
-    email: str = Field(..., description="User email")
-    api_token: str = Field(..., description="API token")
+    api_token: str = Field(..., description="API token or Personal Access Token")
+    email: Optional[str] = Field(default=None, description="User email (required for Cloud, optional for Server)")
     jql: Optional[str] = Field(default=None, description="JQL query (optional)")
     project_key: Optional[str] = Field(default=None, description="Project key (optional)")
     max_results: int = Field(default=100, description="Maximum results")
+    cloud: bool = Field(default=True, description="True for Jira Cloud, False for Jira Server")
 
 
 class ConfluenceConnectionRequest(BaseModel):
     """Request to connect to Confluence."""
 
     base_url: str = Field(..., description="Confluence base URL")
-    email: str = Field(..., description="User email")
-    api_token: str = Field(..., description="API token")
+    api_token: str = Field(..., description="API token or Personal Access Token")
+    email: Optional[str] = Field(default=None, description="User email (required for Cloud, optional for Server)")
     space_key: Optional[str] = Field(default=None, description="Space key (optional)")
     page_id: Optional[str] = Field(default=None, description="Page ID (optional)")
     max_pages: int = Field(default=100, description="Maximum pages")
+    cloud: bool = Field(default=True, description="True for Confluence Cloud, False for Confluence Server")
 
 
 class ConnectionTestResponse(BaseModel):

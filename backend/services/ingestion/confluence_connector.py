@@ -17,23 +17,42 @@ class ConfluenceConnector:
     def __init__(
         self,
         base_url: str,
-        email: str,
         api_token: str,
+        email: Optional[str] = None,
+        cloud: bool = True,
     ):
         """Initialize Confluence connector.
 
         Args:
-            base_url: Confluence instance URL (e.g., https://your-domain.atlassian.net/wiki)
-            email: User email
+            base_url: Confluence instance URL
+                - Cloud: https://your-domain.atlassian.net/wiki
+                - Server: http://your-server:8090
             api_token: API token from Confluence
+            email: User email (required for Cloud, optional for Server)
+            cloud: True for Confluence Cloud, False for Confluence Server
         """
         self.base_url = base_url
-        self.confluence = Confluence(
-            url=base_url,
-            username=email,
-            password=api_token,
-            cloud=True,
-        )
+        self.cloud = cloud
+
+        if cloud and not email:
+            raise ValueError("email is required for Confluence Cloud")
+
+        # For Cloud: use email as username
+        # For Server: use token directly (no username needed)
+        if cloud:
+            self.confluence = Confluence(
+                url=base_url,
+                username=email,
+                password=api_token,
+                cloud=True,
+            )
+        else:
+            # Confluence Server with token authentication
+            self.confluence = Confluence(
+                url=base_url,
+                token=api_token,
+                cloud=False,
+            )
 
     async def test_connection(self) -> dict[str, any]:
         """Test Confluence connection.
