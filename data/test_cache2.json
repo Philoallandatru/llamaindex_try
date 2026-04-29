@@ -1,0 +1,18 @@
+{
+  "jira_issues": {
+    "TEST-123": {
+      "indexed_at": "2026-04-28T18:22:39.381720",
+      "project": "TEST"
+    },
+    "TEST-456": {
+      "indexed_at": "2026-04-28T18:22:39.382721",
+      "project": "TEST"
+    },
+    "TEST-789": {
+      "indexed_at": "2026-04-28T18:22:39.382721",
+      "project": "TEST"
+    }
+  },
+  "confluence_pages": {},
+  "documents": {}
+}

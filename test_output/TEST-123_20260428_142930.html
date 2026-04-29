@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis: TEST-123</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+               max-width: 900px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        h1 { color: #0052CC; border-bottom: 3px solid #0052CC; padding-bottom: 10px; }
+        h2 { color: #172B4D; margin-top: 30px; border-bottom: 1px solid #DFE1E6; padding-bottom: 8px; }
+        h3 { color: #42526E; }
+        hr { border: none; border-top: 2px solid #DFE1E6; margin: 30px 0; }
+        section { margin: 20px 0; }
+        code { background: #F4F5F7; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #F4F5F7; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .metadata { background: #DEEBFF; padding: 15px; border-radius: 5px; margin: 15px 0; }
+        .checkbox { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Jira Deep Analysis: TEST-123</h1>
+    <p><strong>Generated:</strong> 2026-04-28 14:29:30</p>
+
+    # Jira Deep Analysis: TEST-123</p><p><strong>Generated:<strong> 2026-04-28 14:29:30</p><p><hr></p><p></section><section><h2>Issue Details</p><p>Issue: TEST-123
+Summary: NVMe SSD performance degradation after firmware update
+Status: Open
+Priority: High
+Assignee: John Doe</p><p>Description:</p><p>After updating firmware from v3.2 to v3.3, we observed significant performance degradation:
+- Sequential read dropped from 3500 MB/s to 2800 MB/s
+- Random IOPS decreased by 25%
+- Latency increased from 50us to 80us</p><p>Environment:
+- NVMe SSD: Samsung 980 PRO
+- PCIe Gen4 x4
+- Firmware: v3.3 (PCI_Firmware_v3.3_20210120_NCB.pdf)
+- OS: Ubuntu 22.04</p><p>Steps to reproduce:
+1. Update firmware to v3.3
+2. Run fio benchmark
+3. Compare results with v3.2</p><p>Expected: Performance should remain stable or improve
+Actual: 20-25% performance drop</p><p>Related specs:
+- NVM Express Base Specification 2.1
+- PCIe Base 5.0 specification</p><p><h3>Metadata
+- <strong>Key:<strong> TEST-123
+- <strong>Status:<strong> Open
+- <strong>Priority:<strong> High
+- <strong>Assignee:<strong> John Doe</p><p><hr></p><p></section><section><h2>Similar Issues (1)</p><p><h3>1. TEST-123 (similarity: 0.95)
+Issue: TEST-123
+Summary: NVMe SSD performance degradation after firmware update
+Status: Open
+Priority: High
+Assignee: John Doe</p><p>Description:</p><p>After updating firmware from v3.2 to v3.3, we observed significant performance degradation:
+- Sequential read dropped from 3500 MB/s to 2800 MB/s
+- Random IOP...</p><p>
+<hr></p><p></section><section><h2>Relevant Documentation (10)</p><p><h3>1. [jira] Untitled (relevance: 0.95)
+Issue: TEST-123
+Summary: NVMe SSD performance degradation after firmware update
+Status: Open
+Priority: High
+Assignee: John Doe</p><p>Description:</p><p>After updating firmware from v3.2 to v3.3, we observed significant performance degradation:
+- Sequential read dropped from 3500 MB/s to 2800 MB/s
+- Random IOP...</p><p><h3>2. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.61)
+NVM Express® Base Specification, Revision 2.1 
+ 
+194 
+Figure 183: Firmware Commit – Command Specific Status Values 
+Value Description 
+06h Invalid Firmware Slot:  The firmware slot indicated is invalid  or read only . This error is indicated if the 
+firmware slot exceeds the number supported.  
+07h ...</p><p><h3>3. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.60)
+NVM Express® Base Specification, Revision 2.1 
+ 
+243
+Figure 237: Additional Hardware Error Information for Unexpected Power Loss Errors 
+Bytes Description 
+15:0 Unexpected Power Loss  (UPL): This field shall indicate the value from the Unexpected 
+Power Losses field in the SMART / Health Information...</p><p><h3>4. [documents\20190719_NVME-301-1_Das Sharma_FINAL.pdf] Untitled (relevance: 0.60)
+PCIe® SSDs for Storage
+Flash Memory Summit 2019
+Santa Clara, CA 10
+▪ PCI Express is a great interface for SSDs
+• Stunning performance 1 GB/s per lane/ direction (PCIe 3.0 x1) [2 (4) GB/s for PCIe 4.0 (5.0)]
+• Lane scalability 4 GB/s per device (PCIe 3.0 x4) [8 (16) GB/s for PCIe 4.0 (5.0)]
+• Lower l...</p><p><h3>5. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.59)
+NVM Express® Base Specification, Revision 2.1 
+ 
+497
+a) short device self-test operation (refer to section 8.1.7.1); 
+b) extended device self-test operation (refer to section 8.1.7.2); and 
+c) Host-Initiated Refresh operation (refer to section 8.1.11). 
+Figure 595 is an informative example of a devi...</p><p><h3>6. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.59)
+NVM Express® Base Specification, Revision 2.1 
+ 
+244 
+Figure 238: Additional Hardware Error Information for correctable and uncorrectable PCIe 
+errors 
+Bytes Description 
+79:64 
+PCIe AER TLP Prefix Log Register (PCIEATPLR): Contains the contents of the PCIe AER 
+TLP Prefix Log Register ( refer to th...</p><p><h3>7. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.58)
+NVM Express® Base Specification, Revision 2.1 
+ 
+213
+5.1.12.1.4 Firmware Slot Information (Log Page Identifier 03h) 
+This log page is used to describe the firmware revision stored in each firmware slot supported. The firmware 
+revision is indicated as an ASCII string.  The log page also indicates th...</p><p><h3>8. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.57)
+NVM Express® Base Specification, Revision 2.1 
+ 
+276 
+Figure 286: FDP Statistics Log Page 
+Bytes Description 
+15:00 
+Host Bytes with Metadata Written (HBMW): Contains the total number of bytes of user data the host 
+has written to the specified Endurance Group as part of processing I/O commands as d...</p><p><h3>9. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.57)
+NVM Express® Base Specification, Revision 2.1 
+ 
+211
+Figure 206: SMART / Health Information Log Page 
+Bytes Description 
+159:144 
+Unexpected Power Losses (UPL): Contains a count of the number of unexpected power losses. This 
+count shall be incremented if, and only if, main power is lost when: 
+a) t...</p><p><h3>10. [documents\NVM-Express-Base-Specification-Revision-2.1-2024.08.05-Ratified.pdf] Untitled (relevance: 0.57)
+NVM Express® Base Specification, Revision 2.1 
+ 
+148 
+Figure 106: Status Code – Media and Data Integrity Error Values 
+Value Description Command Set(s)1 
+00h to 7Fh Reserved  
+80h Write Fault: The write data could not be committed to the media.   
+81h Unrecovered Read Error: The read data could not ...</p><p>
+<hr></p><p></section><section><h2>Root Cause Analysis</p><p>Based on the provided issue details and relevant documentation, here is the structured analysis and action plan for <strong>TEST-123<strong>.</p><p><h3>1. Root Cause Analysis</p><p>The performance degradation observed after updating the Samsung 980 PRO firmware from v3.2 to v3.3 is likely caused by a change in the <strong>firmware's internal queue management or error handling logic<strong>, rather than a hardware failure (as indicated by the lack of SMART errors in the provided specs).</p><p><em>   <strong>Aggressive Error Correction/Recovery:<strong> Firmware updates often introduce stricter error correction thresholds or more aggressive recovery mechanisms for minor read/write errors. If the new v3.3 firmware is re-mapping sectors that were previously considered "safe" (or performing redundant checks on every block), it introduces overhead, resulting in increased latency (50µs → 80µs) and reduced IOPS (-25%).
+<em>   <strong>Queue Depth Optimization Changes:<strong> The drop in sequential throughput (3500 MB/s → 2800 MB/s) suggests the firmware may have altered its internal queue depth handling or buffer management. A more conservative approach to queue utilization can prevent the controller from saturating the PCIe Gen4 x4 bandwidth, leading to underutilization of the interface.
+<em>   <strong>Spec Compliance vs. Performance Trade-off:<strong> While the NVM Express Base Specification (Rev 2.1) mandates specific status reporting for firmware commits (Figure 183), it does not mandate performance optimization strategies. The v3.3 update may prioritize data integrity or compliance with newer, unratified internal standards over raw throughput, causing the observed degradation.
+<em>   <strong>No Hardware Faults Detected:<strong> The provided documentation regarding "Unexpected Power Loss" and "Invalid Firmware Image" indicates that the firmware was successfully loaded (no 07h error) and the device is functioning within spec limits; however, the <em>behavioral<em> change in data processing is what triggered the performance drop.</p><p><h3>2. Action Items</p><p>| ID | Action Item | Owner | Priority |
+| :--- | :--- | :--- | :--- |
+| <strong>AI-01<strong> | <strong>Rollback Verification:<strong> Revert the SSD firmware to v3.2 and run `fio` benchmarks again to confirm baseline performance is restored. | John Doe / QA | High |
+| <strong>AI-02<strong> | <strong>Deep Log Analysis:<strong> Enable verbose NVMe logging (`nvme-cli --log-level=debug`) during a stress test with v3.3 to capture specific error codes or queue flush events that correlate with the latency spikes. | Dev Team | Medium |
+| <strong>AI-03<strong> | <strong>Samsung Support Engagement:<strong> Contact Samsung R&D (via their support portal) providing the `fio` results, environment specs, and the specific firmware file (`PCI_Firmware_v3.3_20210120_NCB.pdf`). Request a root cause analysis for the v3.3 regression. | John Doe | High |
+| <strong>AI-04<strong> | <strong>Workaround Implementation:<strong> If immediate production impact is critical, implement a script to automatically downgrade firmware back to v3.2 or restrict deployment of v3.3 until a patch is released by Samsung. | Ops Team | Medium |
+| <strong>AI-05<strong> | <strong>Alternative Firmware Check:<strong> Investigate if there are any subsequent "hotfix" versions for v3.3 (e.g., v3.3.1) that address known performance regressions, even if not publicly documented yet. | John Doe | Low |</p><p><h3>3. Verification Steps</p><p>To validate the resolution of this issue, perform the following steps:</p><p>1.  <strong>Baseline Re-verification:<strong>
+    <em>   Flash the SSD back to <strong>Firmware v3.2<strong>.
+    <em>   Run `fio` with the same parameters as in the original report (Sequential Read, Random IOPS).
+    <em>   <strong>Expected Result:<strong> Sequential read ≥ 3400 MB/s; Latency ≤ 55µs.</p><p>2.  <strong>Stress Testing with v3.3:<strong>
+    <em>   Flash to <strong>Firmware v3.3<strong>.
+    <em>   Run a sustained stress test (e.g., `fio` for 1 hour at 80% load).
+    <em>   Monitor system logs (`dmesg`, `/var/log/syslog`) and NVMe logs (`nvme log dump`) for any repeated error codes related to firmware commits or unexpected power loss.</p><p>3.  <strong>Comparison Matrix:<strong>
+    Create a table comparing metrics between v3.2 (Rollback) and v3.3 (Current):</p><p>    | Metric | Expected (v3.2 Baseline) | Observed (v3.3 Current) | Status |
+    | :--- | :--- | :--- | :--- |
+    | Sequential Read Speed | ~3500 MB/s | 2800 MB/s | ❌ Fail |
+    | Random IOPS | Baseline | -25% drop | ❌ Fail |
+    | Latency (Avg) | ≤ 50 µs | 80 µs | ❌ Fail |</p><p>4.  <strong>Final Decision:<strong>
+    <em>   If Step 1 restores performance, the issue is confirmed as a <strong>firmware regression<strong>.
+    <em>   Proceed with <strong>AI-03<strong> to request an official fix from Samsung.
+    <em>   If Step 2 reveals hardware errors (e.g., UPLI bits set), investigate physical drive health despite the firmware update.</p><p><hr></p><p></section><section><h2>Next Steps</p><p>- [ ] Review RCA findings
+- [ ] Validate action items
+- [ ] Execute verification steps
+- [ ] Update Jira issue with findings</p><p>
+</body>
+</html>

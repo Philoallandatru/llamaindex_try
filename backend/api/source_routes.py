@@ -6,6 +6,7 @@ from typing import Optional
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
+from backend.api import analysis_routes
 from backend.config.settings import settings
 from backend.models.api import (
     ConfluenceConnectionRequest,
@@ -141,6 +142,9 @@ async def sync_jira(request: JiraConnectionRequest):
             email=request.email,
             api_token=request.api_token,
         )
+
+        # Set connector for analysis routes
+        analysis_routes.set_jira_connector(connector)
 
         # Fetch issues
         if request.jql:

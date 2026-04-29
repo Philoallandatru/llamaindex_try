@@ -31,12 +31,16 @@ class SessionManager:
         self,
         name: Optional[str] = None,
         metadata: Optional[dict] = None,
+        knowledge_base_id: Optional[str] = None,
+        model_id: Optional[str] = None,
     ) -> ChatSession:
         """Create a new chat session.
 
         Args:
             name: Session name (optional)
             metadata: Session metadata (optional)
+            knowledge_base_id: Knowledge base ID (optional)
+            model_id: Model ID (optional)
 
         Returns:
             New ChatSession
@@ -47,12 +51,14 @@ class SessionManager:
             session_id=session_id,
             name=name or f"Chat {datetime.utcnow().strftime('%Y-%m-%d %H:%M')}",
             metadata=metadata or {},
+            knowledge_base_id=knowledge_base_id,
+            model_id=model_id,
         )
 
         # Save session
         self._save_session(session)
 
-        logger.info(f"Created session: {session_id}")
+        logger.info(f"Created session: {session_id} (KB: {knowledge_base_id}, Model: {model_id})")
 
         return session
 

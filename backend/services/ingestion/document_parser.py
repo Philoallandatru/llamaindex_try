@@ -22,6 +22,9 @@ class DocumentParser:
         ".xls": "office",
         ".pptx": "office",
         ".ppt": "office",
+        ".txt": "text",
+        ".md": "text",
+        ".json": "text",
     }
 
     def __init__(self, use_mineru: bool = True):
@@ -63,6 +66,8 @@ class DocumentParser:
             return await self.parse_pdf(file_path)
         elif format_type == "office":
             return await self.parse_office(file_path)
+        elif format_type == "text":
+            return await self.parse_text(file_path)
         else:
             raise ValueError(f"Unknown format type: {format_type}")
 
@@ -141,6 +146,38 @@ class DocumentParser:
                 raise RuntimeError(f"Failed to parse Office document: {e}")
         else:
             raise RuntimeError("MinerU not available for Office document parsing")
+
+    async def parse_text(self, file_path: Path) -> list[Document]:
+        """Parse plain text file.
+
+        Args:
+            file_path: Path to text file
+
+        Returns:
+            List of Document objects
+        """
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                text = f.read()
+
+            if not text.strip():
+                logger.warning(f"Empty text file: {file_path}")
+                return []
+
+            doc = Document(
+                text=text,
+                metadata={
+                    "source": str(file_path),
+                    "source_type": "text",
+                    "file_name": file_path.name,
+                    "parser": "text",
+                },
+            )
+            return [doc]
+
+        except Exception as e:
+            logger.error(f"Text parsing failed: {e}")
+            raise RuntimeError(f"Failed to parse text file: {e}")
 
     def _convert_to_documents(
         self,

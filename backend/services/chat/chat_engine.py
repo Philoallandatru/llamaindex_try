@@ -46,6 +46,8 @@ class ChatEngine:
         retrieval_mode: str = "hybrid",
         similarity_top_k: int = 5,
         source_filters: Optional[dict] = None,
+        knowledge_base_id: Optional[str] = None,
+        model_id: Optional[str] = None,
     ) -> ChatResponse:
         """Send a message and get response.
 
@@ -55,6 +57,8 @@ class ChatEngine:
             retrieval_mode: Retrieval mode ('hybrid', 'vector', 'bm25')
             similarity_top_k: Number of sources to retrieve
             source_filters: Filters for source retrieval
+            knowledge_base_id: Knowledge base ID (overrides session default)
+            model_id: Model ID (overrides session default)
 
         Returns:
             ChatResponse with assistant message and sources
@@ -71,6 +75,11 @@ class ChatEngine:
         session = self.session_manager.load_session(session_id)
         if not session:
             raise ValueError(f"Session not found: {session_id}")
+
+        # Determine which knowledge base and model to use
+        # Priority: request parameter > session default > system default
+        effective_kb_id = knowledge_base_id or session.knowledge_base_id
+        effective_model_id = model_id or session.model_id
 
         # Add user message to session
         self.session_manager.add_message(
@@ -90,6 +99,8 @@ class ChatEngine:
             retrieval_mode=retrieval_mode,
             similarity_top_k=similarity_top_k,
             conversation_history=history[:-1],  # Exclude current message
+            knowledge_base_id=effective_kb_id,
+            model_id=effective_model_id,
         )
 
         # Query
@@ -124,10 +135,12 @@ class ChatEngine:
                 "retrieval_mode": retrieval_mode,
                 "num_sources": len(sources),
                 "session_id": session_id,
+                "knowledge_base_id": effective_kb_id,
+                "model_id": effective_model_id,
             },
         )
 
-        logger.info(f"Generated response for session {session_id} with {len(sources)} sources")
+        logger.info(f"Generated response for session {session_id} with {len(sources)} sources (KB: {effective_kb_id}, Model: {effective_model_id})")
 
         return chat_response
 
@@ -217,6 +230,8 @@ class ChatEngine:
         retrieval_mode: str,
         similarity_top_k: int,
         conversation_history: list[ChatMessage],
+        knowledge_base_id: Optional[str] = None,
+        model_id: Optional[str] = None,
     ) -> CondensePlusContextChatEngine:
         """Create chat engine with context.
 
@@ -224,14 +239,23 @@ class ChatEngine:
             retrieval_mode: Retrieval mode
             similarity_top_k: Number of sources
             conversation_history: Previous messages
+            knowledge_base_id: Knowledge base ID (optional, uses default if None)
+            model_id: Model ID (optional, uses default if None)
 
         Returns:
             CondensePlusContextChatEngine
         """
-        # Get retriever
+        # Construct metadata filters if knowledge_base_id is provided
+        filters = None
+        if knowledge_base_id:
+            filters = {"knowledge_base_id": knowledge_base_id}
+            logger.info(f"Filtering documents by knowledge_base_id: {knowledge_base_id}")
+
+        # Get retriever with filters
         retriever = self.index_manager.get_retriever(
             similarity_top_k=similarity_top_k,
             retrieval_mode=retrieval_mode,
+            filters=filters,
         )
 
         # Create memory buffer

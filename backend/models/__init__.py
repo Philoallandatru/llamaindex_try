@@ -1,1 +1,1 @@
-"""Pydantic models."""
+"""Data models for the application."""

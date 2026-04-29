@@ -39,6 +39,9 @@ async def get_index_stats():
 
     try:
         stats = index_manager.get_stats()
+        logger.info(f"[DEBUG] Index manager id: {id(index_manager)}")
+        logger.info(f"[DEBUG] Documents in memory: {len(index_manager.documents)}")
+        logger.info(f"[DEBUG] Vector index: {index_manager.vector_index}")
         return IndexStatsResponse(**stats)
 
     except Exception as e:

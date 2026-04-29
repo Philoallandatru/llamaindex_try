@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis: TEST-456</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+               max-width: 900px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+        h1 { color: #0052CC; border-bottom: 3px solid #0052CC; padding-bottom: 10px; }
+        h2 { color: #172B4D; margin-top: 30px; border-bottom: 1px solid #DFE1E6; padding-bottom: 8px; }
+        h3 { color: #42526E; }
+        hr { border: none; border-top: 2px solid #DFE1E6; margin: 30px 0; }
+        section { margin: 20px 0; }
+        code { background: #F4F5F7; padding: 2px 6px; border-radius: 3px; }
+        pre { background: #F4F5F7; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .metadata { background: #DEEBFF; padding: 15px; border-radius: 5px; margin: 15px 0; }
+        .checkbox { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Jira Deep Analysis: TEST-456</h1>
+    <p><strong>Generated:</strong> 2026-04-28 14:36:01</p>
+
+    # Jira Deep Analysis: TEST-456</p><p><strong>Generated:<strong> 2026-04-28 14:36:01</p><p><hr></p><p></section><section><h2>Issue Details</p><p>Issue: TEST-456
+Summary: PCIe link training failure on cold boot
+Status: In Progress
+Priority: Medium
+Assignee: Jane Smith</p><p>Description:</p><p>PCIe device fails to enumerate on cold boot, requires warm reboot to detect.</p><p>Symptoms:
+- Device not visible in lspci on cold boot
+- Works fine after warm reboot
+- Link training timeout in dmesg</p><p>Hardware:
+- PCIe Gen4 NVMe SSD
+- Motherboard: ASUS ROG with PCIe 5.0 support</p><p>Investigation needed:
+- Check PCIe link training sequence per PCIe Base 5.0 spec
+- Verify power sequencing timing
+- Review firmware initialization code</p><p><h3>Metadata
+- <strong>Key:<strong> TEST-456
+- <strong>Status:<strong> In Progress
+- <strong>Priority:<strong> Medium
+- <strong>Assignee:<strong> Jane Smith</p><p><hr></p><p></section><section><h2>Similar Issues (2)</p><p><h3>1. TEST-456 (similarity: 0.02)
+Issue: TEST-456
+Summary: PCIe link training failure on cold boot
+Status: In Progress
+Priority: Medium
+Assignee: Jane Smith</p><p>Description:</p><p>PCIe device fails to enumerate on cold boot, requires warm reboot to detect.</p><p>Symptoms:
+- Device not visible in lspci on cold boot
+- Works fine after warm reboot
+...</p><p><h3>2. TEST-123 (similarity: 0.02)
+Issue: TEST-123
+Summary: NVMe SSD performance degradation after firmware update
+Status: Open
+Priority: High
+Assignee: John Doe</p><p>Description:</p><p>After updating firmware from v3.2 to v3.3, we observed significant performance degradation:
+- Sequential read dropped from 3500 MB/s to 2800 MB/s
+- Random IOP...</p><p>
+<hr></p><p></section><section><h2>Relevant Documentation (10)</p><p><h3>1. [documents\PCI_Firmware_v3.3_20210120_NCB.pdf] Untitled (relevance: 0.02)
+PCI SERVICES IN ACPI 
+PCI FIRMWARE SPECIFICATION 
+REVISION 3.3 
+JANUARY 20, 2021  85 
+ 
+ IMPLEMENTATION NOTE 
+DPC Event Handling: The following flow chart documents the behavior when firmware maintains control of 
+AER and DPC and grants control of PCIe Hot-Plug to the operating system. 
+Is OS state ...</p><p><h3>2. [jira] Untitled (relevance: 0.02)
+Issue: TEST-456
+Summary: PCIe link training failure on cold boot
+Status: In Progress
+Priority: Medium
+Assignee: Jane Smith</p><p>Description:</p><p>PCIe device fails to enumerate on cold boot, requires warm reboot to detect.</p><p>Symptoms:
+- Device not visible in lspci on cold boot
+- Works fine after warm reboot
+...</p><p><h3>3. [documents\PCI_Express_Base_5.0r1.0-2019-05-22.pdf] Untitled (relevance: 0.02)
+◦ Following Flow Control initialization for VC0, it is possible for TLPs and DLLPs to be transferred across
+the Link.
+Following a Conventional Reset, some devices may require additional time before they are able to respond to Requests
+they receive. Particularly for Configuration Requests it is neces...</p><p><h3>4. [jira] Untitled (relevance: 0.02)
+Issue: TEST-123
+Summary: NVMe SSD performance degradation after firmware update
+Status: Open
+Priority: High
+Assignee: John Doe</p><p>Description:</p><p>After updating firmware from v3.2 to v3.3, we observed significant performance degradation:
+- Sequential read dropped from 3500 MB/s to 2800 MB/s
+- Random IOP...</p><p><h3>5. [documents\PCI_Firmware_v3.3_20210120_NCB.pdf] Untitled (relevance: 0.02)
+PCI SERVICES IN ACPI 
+PCI FIRMWARE SPECIFICATION 
+REVISION 3.3 
+JANUARY 20, 2021  73 
+bridge windows, or bridge secondary and subordinate bus numbers of this device even 
+though this restriction applies to the hierarchy below a bridge (unless another _DSM in that 
+hierarchy also implements Function ...</p><p><h3>6. [documents\PCI_Express_Base_5.0r1.0-2019-05-22.pdf] Untitled (relevance: 0.02)
+6.6 PCI Express Reset - Rules
+This section specifies the PCI Express Reset mechanisms. This section covers the relationship between the architectural
+mechanisms defined in this document and the reset mechanisms defined in this document. Any relationship between
+the PCI Express Conventional Reset and...</p><p><h3>7. [documents\PCI_Firmware_v3.3_20210120_NCB.pdf] Untitled (relevance: 0.02)
+PCI SERVICES IN ACPI 
+PCI FIRMWARE SPECIFICATION 
+REVISION 3.3 
+JANUARY 20, 2021  77 
+Return: 
+An integer whose description is as follows: 
+Type: Integer 
+Purpose: Allow operating system to avoid duplicating post power-on delay on Sx resume flow 
+Description: 
+0: No (There is no hardware or firmware...</p><p><h3>8. [documents\PCI_Express_Base_5.0r1.0-2019-05-22.pdf] Untitled (relevance: 0.02)
+Register
+Attribute Description
+RWS
+Sticky - Read-Write - Register bits are read-write and are Set or Cleared by software to the desired state. Bits are neither
+initialized nor modified by hot reset or FLR.136
+If the optional feature that is associated with the bits is not implemented, the bits are p...</p><p><h3>9. [documents\PCI_Firmware_v3.3_20210120_NCB.pdf] Untitled (relevance: 0.02)
+PCI SERVICES IN ACPI 
+PCI FIRMWARE SPECIFICATION 
+REVISION 3.3 
+JANUARY 20, 2021  60 
+4.5.2.4. Dependencies Between _OSC Control Bits 
+Because handling of hot-plug events, power management events, advanced error reporting, 
+downstream port containment, and completion timeout all require the modifica...</p><p><h3>10. [documents\PCI_Express_Base_5.0r1.0-2019-05-22.pdf] Untitled (relevance: 0.02)
+◦ Following Flow Control initialization for VC0, it is possible for TLPs and DLLPs to be transferred across
+the Link.
+Following a Conventional Reset, some devices may require additional time before they are able to respond to Requests
+they receive. Particularly for Configuration Requests it is neces...</p><p>
+<hr></p><p></section><section><h2>Root Cause Analysis</p><p>Based on the provided issue details and documentation, here is the Root Cause Analysis, Action Items, and Verification Steps for <strong>TEST-456<strong>.</p><p><h3>1. Root Cause Analysis</p><p>The failure of the PCIe Gen4 NVMe SSD to enumerate on a cold boot (while functioning correctly after a warm reboot) indicates a <strong>power sequencing or initialization timing mismatch<strong> between the host controller (ASUS ROG motherboard) and the device firmware, specifically regarding the PCIe Base 5.0 specification requirements for link training.</p><p><em>   <strong>Symptom Correlation:<strong> The fact that the device works immediately after a warm reboot suggests that the hardware is physically capable of communication, but the <em>initial state<em> upon power-on (cold boot) violates the deterministic timing rules required by the PCIe spec to successfully complete Link Training.
+<em>   <strong>Spec Violation:<strong> According to the `PCI_Express_Base_5.0r1.0` documentation provided: "Following a Conventional Reset, some devices may require additional time before they are able to respond to Requests... Particularly for Configuration Requests it is necessary that components and devices behave in a deterministic way."
+<em>   <strong>Hypothesis:<strong> The firmware initialization code (likely the `_DSM` or ACPI handler referenced in the `PCI_Firmware_v3.3` doc) does not include sufficient delay before issuing PCIe configuration requests during the cold boot sequence. Unlike a warm reboot, where the system state is preserved and the link is already established, the cold boot triggers a full reset cycle. If the firmware attempts to access the device's Configuration Space or trigger Link Training too quickly after power assertion (before the device stabilizes), it results in a timeout, causing `lspci` to fail to detect the device.</p><p><h3>2. Action Items</p><p>| ID | Action Item | Owner | Priority |
+| :--- | :--- | :--- | :--- |
+| <strong>AI-01<strong> | <strong>Review Firmware Initialization Sequence:<strong> Analyze the firmware code responsible for PCIe initialization (referencing `PCI_Firmware_v3.3_20210120_NCB.pdf`). Identify where configuration requests are issued post-reset. | Jane Smith | High |
+| <strong>AI-02<strong> | <strong>Implement Delay Logic:<strong> Modify the firmware to insert a deterministic delay (e.g., 50ms–100ms) after power-on/reset before initiating PCIe Link Training or Configuration Space access, adhering to Base 5.0 rules for post-reset behavior. | Jane Smith | High |
+| <strong>AI-03<strong> | <strong>Verify Power Sequencing:<strong> Check the motherboard BIOS/UEFI logs and firmware handshake signals to ensure the host controller is not asserting "Link Ready" before the device has fully powered up its internal PHYs. | Jane Smith | Medium |
+| <strong>AI-04<strong> | <strong>Update Firmware Release Notes:<strong> Document the fix in a new firmware version (e.g., v3.4) and update the `PCI_Firmware_v3.3` spec document with the revised initialization flow chart regarding DPC events and hot-plug control. | Jane Smith / John Doe | Medium |
+| <strong>AI-05<strong> | <strong>Regression Testing:<strong> Ensure that the new delay logic does not introduce latency issues during normal operation (warm boot) or affect Hot-Plug functionality, as noted in the ACPI spec regarding `_DSM` restrictions. | John Doe | Low |</p><p><h3>3. Verification Steps</p><p>To confirm the fix and ensure stability across different reboot scenarios:</p><p>1.  <strong>Cold Boot Test:<strong>
+    <em>   Power off the system completely (remove power or shut down OS).
+    <em>   Perform a cold boot (power cycle).
+    <em>   Immediately run `lspci -vvv` within 30 seconds of boot.
+    <em>   <strong>Expected Result:<strong> The NVMe SSD appears in the list without requiring a subsequent reboot. No "Link Training Timeout" errors should appear in `dmesg`.</p><p>2.  <strong>Warm Boot Test (Regression Check):<strong>
+    <em>   Boot the system normally.
+    <em>   Perform a standard OS shutdown and immediate power-on (warm boot).
+    <em>   Run `lspci -vvv` and check `dmesg`.
+    <em>   <strong>Expected Result:<strong> Device enumerates successfully with no latency increase or errors.</p><p>3.  <strong>Hot-Plug Test:<strong>
+    <em>   With the system running, unplug and replug the NVMe SSD (if supported by the chassis/controller).
+    <em>   Monitor `dmesg` for AER (Advanced Error Reporting) messages or DPC event handling failures.
+    <em>   Verify that the device is recognized immediately without needing a full system reboot.</p><p>4.  <strong>Performance Validation:<strong>
+    <em>   Run a benchmark (e.g., `fio`) to ensure sequential read/write speeds match baseline expectations (approx. 3500 MB/s for Gen4 NVMe).
+    <em>   Confirm that the delay introduced in the firmware does not impact I/O latency during active usage.</p><p>5.  <strong>Documentation Review:<strong>
+    <em>   Verify that the updated flow chart in `PCI_Firmware_v3.3` correctly reflects the new "Wait for Deterministic State" step before granting control to the OS or initiating Link Training.</p><p><hr></p><p></section><section><h2>Next Steps</p><p>- [ ] Review RCA findings
+- [ ] Validate action items
+- [ ] Execute verification steps
+- [ ] Update Jira issue with findings</p><p>
+</body>
+</html>

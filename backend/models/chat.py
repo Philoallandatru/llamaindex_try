@@ -28,6 +28,8 @@ class ChatSession(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.utcnow, description="Last update timestamp")
     messages: list[ChatMessage] = Field(default_factory=list, description="Message history")
     metadata: dict[str, Any] = Field(default_factory=dict, description="Session metadata")
+    knowledge_base_id: Optional[str] = Field(default=None, description="Knowledge base ID for this session")
+    model_id: Optional[str] = Field(default=None, description="Model ID for this session")
 
     class Config:
         json_encoders = {
@@ -52,6 +54,14 @@ class SendMessageRequest(BaseModel):
         default=5,
         description="Number of sources to retrieve",
     )
+    knowledge_base_id: Optional[str] = Field(
+        default=None,
+        description="Knowledge base ID to use for this message",
+    )
+    model_id: Optional[str] = Field(
+        default=None,
+        description="Model ID to use for this message",
+    )
 
 
 class ChatResponse(BaseModel):
@@ -69,6 +79,8 @@ class CreateSessionRequest(BaseModel):
 
     name: Optional[str] = Field(default=None, description="Session name")
     metadata: dict[str, Any] = Field(default_factory=dict, description="Session metadata")
+    knowledge_base_id: Optional[str] = Field(default=None, description="Knowledge base ID for this session")
+    model_id: Optional[str] = Field(default=None, description="Model ID for this session")
 
 
 class SessionListResponse(BaseModel):

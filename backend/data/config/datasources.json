@@ -1,0 +1,19 @@
+{
+  "fb1155ad-bd93-4433-bc3d-fb3fd4f50d30": {
+    "id": "fb1155ad-bd93-4433-bc3d-fb3fd4f50d30",
+    "name": "Test Document Datasource",
+    "description": "E2E test datasource",
+    "type": "file",
+    "config": {
+      "file_paths": [
+        "C:\\Users\\10259\\Documents\\code\\codex\\llamaindex_try\\backend\\data\\uploads\\test_document.txt"
+      ]
+    },
+    "status": "active",
+    "last_sync": null,
+    "sync_count": 0,
+    "document_count": 0,
+    "created_at": "2026-04-26T06:48:19.325842",
+    "updated_at": "2026-04-26T06:48:19.325842"
+  }
+}

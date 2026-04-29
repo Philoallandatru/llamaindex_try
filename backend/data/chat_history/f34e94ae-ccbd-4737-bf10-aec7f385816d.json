@@ -1,0 +1,43 @@
+{
+  "session_id": "f34e94ae-ccbd-4737-bf10-aec7f385816d",
+  "name": "E2E Test Session",
+  "created_at": "2026-04-26 08:42:07.597905",
+  "updated_at": "2026-04-26 08:45:26.275197",
+  "messages": [
+    {
+      "role": "user",
+      "content": "What features does this system support?",
+      "timestamp": "2026-04-26 08:45:02.435931",
+      "sources": null,
+      "metadata": {}
+    },
+    {
+      "role": "assistant",
+      "content": "I'd love to help! However, I need more details about **which system** you're referring to (e.g., a software platform, hardware device, AI model, or specific application). Could you clarify:  \n- The name of the system?  \n- Its intended use case (e.g., healthcare, education, enterprise)?  \n- Any context from your previous messages or documents?  \n\nOnce I have this information, I can provide accurate features based on reliable sources! \ud83d\ude0a",
+      "timestamp": "2026-04-26 08:45:26.275197",
+      "sources": [
+        {
+          "source_id": "138e0899-6a82-40bc-bf4e-c8f3dce69920",
+          "source_type": "text",
+          "title": "C:\\Users\\10259\\Documents\\code\\codex\\llamaindex_try\\backend\\data\\uploads\\test_document.txt",
+          "url": null,
+          "snippet": "LlamaIndex \u914d\u7f6e\u7ba1\u7406\u7cfb\u7edf\u6d4b\u8bd5\u6587\u6863\n\n\u8fd9\u662f\u4e00\u4e2a\u7528\u4e8e\u6d4b\u8bd5\u65b0\u5b9e\u73b0\u7684\u914d\u7f6e\u7ba1\u7406\u7cfb\u7edf\u7684\u6587\u6863\u3002\n\n\u4e3b\u8981\u529f\u80fd\uff1a\n1. \u6570\u636e\u6e90\u7ba1\u7406 - \u652f\u6301 File\u3001Jira\u3001Confluence \u7b49\u591a\u79cd\u6570\u636e\u6e90\u7c7b\u578b\n2. \u77e5\u8bc6\u5e93\u7ba1\u7406 - \u53ef\u4ee5\u5173\u8054\u591a\u4e2a\u6570\u636e\u6e90\uff0c\u6784\u5efa\u7edf\u4e00\u7684\u77e5\u8bc6\u7d22\u5f15\n3. \u6a21\u578b\u914d\u7f6e - \u652f\u6301\u914d\u7f6e\u591a\u4e2a OpenAI-compatible \u7684 LLM \u6a21\u578b\n4.",
+          "relevance_score": 0.5,
+          "metadata": {
+            "source": "C:\\Users\\10259\\Documents\\code\\codex\\llamaindex_try\\backend\\data\\uploads\\test_document.txt",
+            "source_type": "text",
+            "file_name": "test_document.txt",
+            "parser": "text",
+            "datasource_id": "fb1155ad-bd93-4433-bc3d-fb3fd4f50d30",
+            "datasource_name": "Test Document Datasource",
+            "knowledge_base_id": "5f148ade-0e86-4c41-a74d-09f0a77c46ef"
+          }
+        }
+      ],
+      "metadata": {}
+    }
+  ],
+  "metadata": {},
+  "knowledge_base_id": "5f148ade-0e86-4c41-a74d-09f0a77c46ef",
+  "model_id": "22a5ad2c-1dc7-48c9-b672-c1bf41ed9ebf"
+}

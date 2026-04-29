@@ -1,0 +1,43 @@
+# MinerU配置文件 - 使用ModelScope模型
+
+# 模型配置
+model_config:
+  # 使用ModelScope镜像源
+  model_source: "modelscope"
+
+  # 布局检测模型
+  layout_model: "damo/cv_resnet18_layout-detection"
+
+  # 公式识别模型
+  formula_model: "damo/cv_resnet_formula-recognition"
+
+  # 表格识别模型
+  table_model: "damo/cv_resnet_table-recognition"
+
+# 解析配置
+parse_config:
+  # 输出格式
+  output_format: "markdown"
+
+  # 是否提取图片
+  extract_images: true
+
+  # 是否提取表格
+  extract_tables: true
+
+  # 是否识别公式
+  recognize_formula: true
+
+  # DPI设置
+  dpi: 200
+
+# 性能配置
+performance:
+  # 使用GPU (如果可用)
+  use_gpu: false
+
+  # 批处理大小
+  batch_size: 1
+
+  # 超时时间(秒)
+  timeout: 300
